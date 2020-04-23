@@ -1,0 +1,43 @@
+.App {
+  width: 500px;
+  margin: auto;
+  background: #fdff93;
+}
+
+.App h1 {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.App form {
+  text-align: center;
+}
+
+.App ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.App ul li {
+  border-bottom: 1px solid #ccc;
+  padding: 5px 10px;
+}
+
+.quantity {
+  float: right;
+}
+
+.listHeader {
+  padding: 10px;
+  overflow: hidden;
+}
+
+.itemsText {
+  float: left;
+  font-weight: bold;
+}
+
+.listHeader button {
+  float: right;
+}
