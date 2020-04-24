@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function GroceryList({ groceryList, markPurchased }) {
-
-
+function GroceryList({ groceryItems, onPurchase }) {
   return (
     <ul>
-      {groceryList.map((item, key) => <li
-        key={key}
-        onClick={() => markPurchased(key)}
-        style={{ color: item.isPurchased ? "#ff0000" : "000000" }}
-      >
-        <span>{item.name}</span>
-        <span className="quantity">{item.quantity}</span>
-      </li>)}
+      {groceryItems.map((item, key) => {
+        const { name, quantity, isPurchased } = item;
+        return (<li
+          key={key}
+          onClick={() => onPurchase(key)}
+          style={{ color: isPurchased ? "#ff0000" : "000000" }} >
+          <span>{name}</span>
+          <span className="quantity">{quantity}</span>
+        </li>)
+      })}
     </ul>
   );
 }
 
-function AddGroveryItem({ setGroceryItem, currentItems }) {
-  const [value, setValue] = useState('');
+function GroceryForm({ setGroceryItems, currentItems }) {
+  const [value, setInputValue] = useState('');
   const onSubmit = (e) => {
     e.preventDefault();
     if (!value) {
       return true;
     }
+
     let isItemInList = false;
     let listItems = [...currentItems];
     for (const item of listItems) {
@@ -37,18 +38,19 @@ function AddGroveryItem({ setGroceryItem, currentItems }) {
     if (!isItemInList) {
       listItems = [...currentItems, { name: value, quantity: 1, isPurchased: false }]
     }
-    setGroceryItem(listItems);
-    setValue('');
+
+    setGroceryItems(listItems);
+    setInputValue('');
   };
 
-  const onChange = (e) => {
+  const onInputChange = (e) => {
     e.preventDefault();
-    setValue(e.target.value)
+    setInputValue(e.target.value)
   };
 
   return (
     <form onSubmit={onSubmit}>
-      <input type="text" value={value} onChange={onChange} />
+      <input type="text" id="value" value={value} onChange={onInputChange} />
       <button type="submit">Add</button>
     </form>
   );
@@ -57,29 +59,29 @@ function AddGroveryItem({ setGroceryItem, currentItems }) {
 const defaultItems = [
   { name: "butter", quantity: 1, isPurchased: false },
   { name: "salt", quantity: 1, isPurchased: false },
-  { name: "suger", quantity: 1, isPurchased: false },
+  { name: "sugar", quantity: 1, isPurchased: false },
 ]
 function App() {
-  const [groceryList, setGroceryItem] = useState(defaultItems);
-  const claerAllItems = (e) => {
-    setGroceryItem([]);
+  const [groceryItems, setGroceryItems] = useState(defaultItems);
+  const clearAllItems = (e) => {
+    setGroceryItems([]);
   }
 
-  const markPurchased = (index) => {
-    const newList = [...groceryList];
+  const onPurchase = (index) => {
+    const newList = [...groceryItems];
     newList[index].isPurchased = !newList[index].isPurchased;
-    setGroceryItem(newList);
+    setGroceryItems(newList);
   }
 
   return (
     <div className="App">
       <h1>Grocery List</h1>
-      <AddGroveryItem setGroceryItem={setGroceryItem} currentItems={groceryList} />
+      <GroceryForm setGroceryItems={setGroceryItems} currentItems={groceryItems} />
       <div className="listHeader">
         <div className="itemsText">Items: </div>
-        <button onClick={claerAllItems}>Clear All</button>
+        <button onClick={clearAllItems}>Clear All</button>
       </div>
-      <GroceryList groceryList={groceryList} markPurchased={markPurchased} />
+      <GroceryList groceryItems={groceryItems} onPurchase={onPurchase} />
     </div>
   );
 }
