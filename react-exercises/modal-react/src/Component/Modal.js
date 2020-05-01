@@ -17,7 +17,6 @@ const Modal = props => {
 
   useEffect(() => {
     const onEscape = e => {
-      console.log(e.target.value);
       if (props.shouldCloseOnEsc) {
         return true;
       }
