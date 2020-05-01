@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
+import Modal from "./Component/Modal";
 
 const HomePage = () => {
+  const [signInModal, setSignInModal] = useState(false);
+  const [signUpModal, setSignUpModal] = useState(false);
+  const displayModal = e => {
+    if (e.target.value === "signUp") {
+      setSignUpModal(true);
+    }
+    if (e.target.value === "signIn") {
+      setSignInModal(true);
+    }
+  };
+  const hideModal = modalName => {
+    if (modalName === "signUp") {
+      setSignUpModal(false);
+    }
+    if (modalName === "signIn") {
+      setSignInModal(false);
+    }
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -26,14 +45,24 @@ const HomePage = () => {
             </p>
             <ul className="buttonGroup">
               <li>
-                <button>SIGN UP</button>
+                <button onClick={displayModal} value="signUp">
+                  SIGN UP
+                </button>
               </li>
               <li>
-                <button>SIGN IN</button>
+                <button onClick={displayModal} value="signIn">
+                  SIGN IN
+                </button>
               </li>
             </ul>
           </div>
         </div>
+        <Modal modalVisibility={signUpModal} onClose={hideModal} modalName="signUp">
+          <p>SignUp Modal</p>
+        </Modal>
+        <Modal modalVisibility={signInModal} onClose={hideModal} modalName="signIn">
+          <p>SignIn Modal</p>
+        </Modal>
       </section>
       <footer>
         <div className="container">
