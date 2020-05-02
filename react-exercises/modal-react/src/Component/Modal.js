@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./Modal.css";
 
-const ModalHeader = ({ headingText = "", onClose }) => {
+const ModalHeader = ({ headingText, onClose }) => {
   return (
     <div className="modalHeader">
       <h3>{headingText}</h3>
@@ -12,11 +12,11 @@ const ModalHeader = ({ headingText = "", onClose }) => {
   );
 };
 
-const Modal = props => {
+const Modal = (props) => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const onEscape = e => {
+    const onEscape = (e) => {
       if (props.shouldCloseOnEsc) {
         return true;
       }
@@ -24,13 +24,14 @@ const Modal = props => {
         props.onClose(e.target.value);
       }
     };
-    const detectOnEscape = e => {
+    const detectOnEscape = (e) => {
       if (e.keyCode === 27) {
         onEscape(e);
       }
     };
 
     document.addEventListener("keydown", detectOnEscape);
+
     return () => {
       document.removeEventListener("keydown", detectOnEscape);
     };
@@ -40,10 +41,9 @@ const Modal = props => {
     return null;
   }
 
-  const onClose = e => {
+  const onClose = (e) => {
     props.onClose(e.target.value);
   };
-
   return (
     <div className="modalWrapper" tabIndex="-1">
       <div tabIndex="0"></div>
