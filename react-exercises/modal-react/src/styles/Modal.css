@@ -1,0 +1,65 @@
+.modalWrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  position: relative;
+  max-width: 500px;
+  margin: 2em auto;
+  background: #ffffff;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.modalBody {
+  padding: 15px;
+}
+
+.modalHeader h3 {
+  margin: 0;
+}
+
+.modalCloseBtn {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  color: #666;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+.modalBody .modalCloseBtn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.modalCloseBtn:hover {
+  color: #000;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity 0.15s linear;
+}
+
+.red {
+  background: red;
+}
