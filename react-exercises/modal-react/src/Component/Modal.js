@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./Modal.css";
 
-const ModalHeader = ({ headingText = "", onClose }) => {
+const ModalHeader = ({ headingText, onClose }) => {
   return (
     <div className="modalHeader">
       <h3>{headingText}</h3>
@@ -43,12 +43,11 @@ const Modal = props => {
   const onClose = e => {
     props.onClose(e.target.value);
   };
-
   return (
     <div className="modalWrapper" tabIndex="-1">
       <div tabIndex="0"></div>
       {props.showHeader ? (
-        <div ref={ref} className="modal" ariaModel="true">
+        <div ref={ref} className="modal">
           <ModalHeader
             onClose={onClose}
             headingText={props.headingText ? props.headingText : ""}

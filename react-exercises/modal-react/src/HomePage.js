@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
 import Modal from "./Component/Modal";
+import SignUpForm from "./Component/SignUpForm";
+import SignInForm from "./Component/SignInForm";
 
 const HomePage = () => {
   const [signInModal, setSignInModal] = useState(false);
   const [signUpModal, setSignUpModal] = useState(false);
-  const displayModal = e => {
+  const displayModal = (e) => {
     if (e.target.value === "signUp") {
       setSignUpModal(true);
     }
@@ -13,7 +15,7 @@ const HomePage = () => {
       setSignInModal(true);
     }
   };
-  const hideModal = modalName => {
+  const hideModal = (modalName) => {
     if (modalName === "signUp") {
       setSignUpModal(false);
     }
@@ -57,11 +59,24 @@ const HomePage = () => {
             </ul>
           </div>
         </div>
-        <Modal modalVisibility={signUpModal} onClose={hideModal} modalName="signUp">
-          <p>SignUp Modal</p>
+        <Modal
+          modalVisibility={signUpModal}
+          onClose={hideModal}
+          modalName="signUp"
+          showHeader="true"
+          headingText="Sign Up"
+          shouldCloseOnClick={true}
+        >
+          <SignUpForm></SignUpForm>
         </Modal>
-        <Modal modalVisibility={signInModal} onClose={hideModal} modalName="signIn">
-          <p>SignIn Modal</p>
+        <Modal
+          modalVisibility={signInModal}
+          onClose={hideModal}
+          showHeader="true"
+          headingText="Sign In"
+          modalName="signIn"
+        >
+          <SignInForm></SignInForm>
         </Modal>
       </section>
       <footer>
