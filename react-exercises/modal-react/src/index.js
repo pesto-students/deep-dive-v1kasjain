@@ -8,8 +8,8 @@ import DashBoard from "./DashBoard";
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route path="/landing" render={App} />
-      <Route path="/home" render={DashBoard} />
+      <Route path="/dashboard" render={DashBoard} />
+      <Route path="/" render={App} />
     </Switch>
   </Router>,
   document.getElementById("root")

@@ -12,11 +12,11 @@ const ModalHeader = ({ headingText, onClose }) => {
   );
 };
 
-const Modal = (props) => {
+const Modal = props => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const onEscape = (e) => {
+    const onEscape = e => {
       if (props.shouldCloseOnEsc) {
         return true;
       }
@@ -24,14 +24,13 @@ const Modal = (props) => {
         props.onClose(e.target.value);
       }
     };
-    const detectOnEscape = (e) => {
+    const detectOnEscape = e => {
       if (e.keyCode === 27) {
         onEscape(e);
       }
     };
 
     document.addEventListener("keydown", detectOnEscape);
-
     return () => {
       document.removeEventListener("keydown", detectOnEscape);
     };
@@ -41,14 +40,14 @@ const Modal = (props) => {
     return null;
   }
 
-  const onClose = (e) => {
+  const onClose = e => {
     props.onClose(e.target.value);
   };
   return (
     <div className="modalWrapper" tabIndex="-1">
       <div tabIndex="0"></div>
       {props.showHeader ? (
-        <div ref={ref} className="modal" ariaModel="true">
+        <div ref={ref} className="modal">
           <ModalHeader
             onClose={onClose}
             headingText={props.headingText ? props.headingText : ""}

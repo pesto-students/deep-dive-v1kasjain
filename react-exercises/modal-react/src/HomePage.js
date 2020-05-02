@@ -63,6 +63,7 @@ const HomePage = () => {
           modalVisibility={signUpModal}
           onClose={hideModal}
           modalName="signUp"
+          showHeader="true"
           headingText="Sign Up"
           shouldCloseOnClick={true}
         >
@@ -71,6 +72,8 @@ const HomePage = () => {
         <Modal
           modalVisibility={signInModal}
           onClose={hideModal}
+          showHeader="true"
+          headingText="Sign In"
           modalName="signIn"
         >
           <SignInForm></SignInForm>

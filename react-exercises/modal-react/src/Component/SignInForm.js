@@ -1,35 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Form.css";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 const SignInForm = () => {
-  return (
-    <div>
-      <form className="form">
-        <label className="fieldname">Name:</label>
-        <br />
-        <input
-          className="textfield"
-          type="text"
-          name="name"
-          placeholder="Name"
-        />
-        <br />
+  const [showForm, setShowForm] = useState(true);
+  const onSubmit = e => {
+    e.preventDefault();
+    setShowForm(false);
+  };
 
-        <label className="fieldname">Password:</label>
-        <br />
-        <input
-          className="textfield"
-          type="text"
-          name="password"
-          placeholder="Password"
-        />
-        <br />
+  if (!showForm) {
+    return <Redirect to="/dashboard" />;
+  } else {
+    return (
+      <div>
+        <form className="form" onSubmit={onSubmit}>
+          <label className="fieldname">Name:</label>
+          <br />
+          <input
+            className="textfield"
+            type="text"
+            name="name"
+            placeholder="Name"
+          />
+          <br />
 
-        <Link to="/home">
-          <input className="submit" type="submit" value="Submit" />
-        </Link>
-      </form>
-    </div>
-  );
+          <label className="fieldname">Password:</label>
+          <br />
+          <input
+            className="textfield"
+            type="text"
+            name="password"
+            placeholder="Password"
+          />
+          <br />
+          <input className="submit" type="submit" value="Sign In" />
+        </form>
+      </div>
+    );
+  }
 };
 export default SignInForm;
