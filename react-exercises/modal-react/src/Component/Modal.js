@@ -16,23 +16,36 @@ const Modal = props => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const onEscape = e => {
-      if (props.shouldCloseOnEsc) {
-        return true;
-      }
+    if (props.modalVisibility) {
+      ref.current.focus();
+    }
+
+    const handleEscapePress = e => {
       if (e.keyCode === 27) {
-        props.onClose(e.target.value);
-      }
-    };
-    const detectOnEscape = e => {
-      if (e.keyCode === 27) {
-        onEscape(e);
+        if (props.shouldCloseOnEsc === false) {
+          return true;
+        } else {
+          props.onClose(e.target.value);
+        }
       }
     };
 
-    document.addEventListener("keydown", detectOnEscape);
+    const handleOverlayClick = e => {
+      e.preventDefault();
+      if (props.shouldCloseOnOverlay === false) {
+        return true;
+      } else {
+        if (ref.current && !ref.current.contains(e.target)) {
+          props.onClose(props.modalName);
+        }
+      }
+    };
+
+    document.addEventListener("keyup", handleEscapePress);
+    document.addEventListener("click", handleOverlayClick, true);
     return () => {
-      document.removeEventListener("keydown", detectOnEscape);
+      document.removeEventListener("keyup", handleEscapePress);
+      document.removeEventListener("click", handleOverlayClick, true);
     };
   });
 
@@ -41,11 +54,11 @@ const Modal = props => {
   }
 
   const onClose = e => {
-    props.onClose(e.target.value);
+    props.onClose(props.modalName);
   };
+
   return (
-    <div className="modalWrapper" tabIndex="-1">
-      <div tabIndex="0"></div>
+    <div className="modalWrapper">
       {props.showHeader ? (
         <div ref={ref} className="modal">
           <ModalHeader
@@ -68,7 +81,6 @@ const Modal = props => {
           </div>
         </div>
       )}
-      <div tabIndex="0"></div>
     </div>
   );
 };
