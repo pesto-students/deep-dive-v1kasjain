@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "./Modal.css";
+import "../styles/Modal.css";
 
 const ModalHeader = ({ headingText, onClose }) => {
   return (
@@ -12,7 +12,7 @@ const ModalHeader = ({ headingText, onClose }) => {
   );
 };
 
-const Modal = props => {
+const Modal = (props) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Modal = props => {
       ref.current.focus();
     }
 
-    const handleEscapePress = e => {
+    const handleEscapePress = (e) => {
       if (e.keyCode === 27) {
         if (props.shouldCloseOnEsc === false) {
           return true;
@@ -30,7 +30,7 @@ const Modal = props => {
       }
     };
 
-    const handleOverlayClick = e => {
+    const handleOverlayClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
         if (props.shouldCloseOnOverlay === false) {
           return true;
@@ -52,7 +52,7 @@ const Modal = props => {
     return null;
   }
 
-  const onClose = e => {
+  const onClose = (e) => {
     props.onClose(props.modalName);
   };
 
