@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 const SignInForm = () => {
   const [showForm, setShowForm] = useState(true);
   const onSubmit = e => {
+    console.log('m in c');
     e.preventDefault();
     setShowForm(false);
   };

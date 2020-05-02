@@ -31,11 +31,10 @@ const Modal = props => {
     };
 
     const handleOverlayClick = e => {
-      e.preventDefault();
-      if (props.shouldCloseOnOverlay === false) {
-        return true;
-      } else {
-        if (ref.current && !ref.current.contains(e.target)) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        if (props.shouldCloseOnOverlay === false) {
+          return true;
+        } else {
           props.onClose(props.modalName);
         }
       }
@@ -45,9 +44,9 @@ const Modal = props => {
     document.addEventListener("click", handleOverlayClick, true);
     return () => {
       document.removeEventListener("keyup", handleEscapePress);
-      document.removeEventListener("click", handleOverlayClick, true);
+      document.removeEventListener("click", handleOverlayClick);
     };
-  });
+  }, [props]);
 
   if (!props.modalVisibility) {
     return null;
