@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import DashBoard from "./DashBoard";
+import DashBoard from "./Component/DashBoard";
 
 ReactDOM.render(
   <Router>

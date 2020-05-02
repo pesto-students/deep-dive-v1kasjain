@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./Form.css";
+import "../styles/Form.css";
 import { Redirect } from "react-router-dom";
 const SignInForm = () => {
   const [showForm, setShowForm] = useState(true);
-  const onSubmit = e => {
-    console.log('m in c');
+  const onSubmit = (e) => {
+    console.log("m in c");
     e.preventDefault();
     setShowForm(false);
   };

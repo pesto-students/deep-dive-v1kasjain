@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
-import Modal from "./Component/Modal";
-import SignUpForm from "./Component/SignUpForm";
-import SignInForm from "./Component/SignInForm";
+import logo from "../logo.svg";
+import Modal from "./Modal";
+import SignUpForm from "./SignUpForm";
+import SignInForm from "./SignInForm";
 
 const HomePage = () => {
   const [signInModal, setSignInModal] = useState(false);
