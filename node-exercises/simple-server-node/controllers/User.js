@@ -1,20 +1,22 @@
+const users = { user1: { name: "vikas" }, user2: { name: "dinesh" } };
+
 class User {
-  index(req, res) {
-    const users = { user1: { name: "vikas" }, user2: { name: "dinesh" } };
+  default(req, res) {
     // TODO: find a way to send json as response
+    res.end('Controller method not found.');
+  }
+  get(req, res) {
+    console.log("getting all users");
     res.end(JSON.stringify(users));
   }
-  get() {
-    console("getting all users");
-  }
   put() {
-    console("updating users");
+    console.log("updating users");
   }
   post() {
-    console("creating users");
+    console.log("creating users");
   }
   delete() {
-    console("deleting users");
+    console.log("deleting users");
   }
 }
 

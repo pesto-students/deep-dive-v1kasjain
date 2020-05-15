@@ -18,7 +18,10 @@ const routes = (req, res) => {
     console.log(api[req.url].task);
     const task = require("./controllers/" + api[req.url].task);
     //TODO: Auto detect controller task if not provided call index
-    return task.index(req, res);
+    //return task.index(req, res);
+    const methodInLowerCase = req.method.toLowerCase();  
+    return task[methodInLowerCase](req, res);
+
   } else {
     res.writeHead(404);
     res.end('Page not found');
