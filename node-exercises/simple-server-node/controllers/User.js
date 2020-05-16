@@ -12,8 +12,10 @@ class User {
   put() {
     console.log("updating users");
   }
-  post() {
+  post(req, res) {
     console.log("creating users");
+    console.log(` req body : ${req.body}`)
+    res.end(JSON.stringify(users));
   }
   delete() {
     console.log("deleting users");

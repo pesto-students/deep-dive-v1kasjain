@@ -7,6 +7,11 @@
 // We can assume get / put / post / delete
 
 const api = require("./api");
+const concat = require('concat-stream');
+
+const getRespectiveControllerMethod = (task) => {
+  return require(`./controllers/${task}`);
+}
 
 const routes = (req, res) => {
   if (
@@ -15,12 +20,23 @@ const routes = (req, res) => {
     api[req.url]["method"] &&
     api[req.url].method == req.method
   ) {
-    console.log(api[req.url].task);
-    const task = require("./controllers/" + api[req.url].task);
-    //TODO: Auto detect controller task if not provided call index
-    //return task.index(req, res);
+
     const methodInLowerCase = req.method.toLowerCase();  
-    return task[methodInLowerCase](req, res);
+
+    if (methodInLowerCase === "post") {
+      if (req.headers["content-type"] === "application/json") {
+        req.pipe(concat(data => {
+          // append data to the req body
+          req.body = JSON.parse(data);
+
+          const task = getRespectiveControllerMethod(api[req.url].task);
+          return task[methodInLowerCase](req, res);
+        }));
+      }
+    } else {
+      const task = getRespectiveControllerMethod(api[req.url].task);
+      return task[methodInLowerCase](req, res);
+    }
 
   } else {
     res.writeHead(404);

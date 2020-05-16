@@ -5,6 +5,11 @@ const api = {
     //TODO: add key for middleware
   },
 
-  "/home": {}
+  "/home": {},
+
+  "/users": {
+    method: "POST",
+    task: "User"
+  }
 };
 module.exports = api;
