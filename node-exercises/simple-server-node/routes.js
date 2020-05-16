@@ -25,6 +25,7 @@ const routes = async (req, res) => {
       if (req.method === "POST" || req.method === "PUT") {
         req.pipe(
           concat(data => {
+            console.log(" post data :", data);
             console.log(JSON.parse(data));
             req.body = JSON.parse(data);
             const controller = getRespectiveController(req.api.controller);

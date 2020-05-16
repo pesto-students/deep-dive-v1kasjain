@@ -17,6 +17,12 @@ const api = {
     task: "getParamsFromURL"
   },
 
+  "/login": {
+    method: "POST",
+    controller: "Home",
+    task: "login"
+  },
+
   "/home": {
     method: "GET",
     view: "home.html",

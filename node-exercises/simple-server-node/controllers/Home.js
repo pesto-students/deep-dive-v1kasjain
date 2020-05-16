@@ -1,4 +1,5 @@
 const htmlView = require("../view");
+const credentials = require('./../credentials.json');
 
 class Home {
   index(req, res) {
@@ -12,6 +13,11 @@ class Home {
   getParamsFromURL(req, res) {
     res.setHeader("Content-Type", "application/json");
     res.end(req.query);
+  }
+
+  login(req, res) {
+    console.log(`credentials : ${credentials}`);
+    return htmlView("home.html", res);
   }
 }
 
