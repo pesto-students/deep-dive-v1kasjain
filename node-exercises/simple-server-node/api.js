@@ -1,8 +1,20 @@
 const api = {
   "/": {
     method: "GET",
-    task: "User"
-    //TODO: add key for middleware
+    controller: "Home",
+    task: "index"
+  },
+
+  "/set-user": {
+    method: "POST",
+    controller: "Home",
+    task: "setUser"
+  },
+
+  "/get-params-from-url": {
+    method: "GET",
+    controller: "Home",
+    task: "getParamsFromURL"
   },
 
   "/home": {
