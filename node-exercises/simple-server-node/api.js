@@ -5,7 +5,11 @@ const api = {
     //TODO: add key for middleware
   },
 
-  "/home": {},
+  "/home": {
+    method: "GET",
+    view: "home.html",
+    fileType: "html"
+  },
 
   "/users": {
     method: "POST",
