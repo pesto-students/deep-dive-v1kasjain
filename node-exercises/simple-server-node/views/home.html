@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Home Page</title>
+            <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
+            .login-view{
+                display: grid;
+                grid-template-rows: 10rem 100%;
+                grid-template-columns: 25% 50% 25%;
+            }
+
+            .login-view-item1{
+                grid-row: 1;
+                grid-column: 2;
+                justify-self: center;
+                align-self: center;
+            }
+
+            .login-view-item2, .login-view-item3{
+                grid-row: 2;
+                grid-column: 2;
+                justify-self: center;
+            }
+
+            .card{
+                width: 50rem;
+            }
+
+            .visible{
+                display: block;
+            }
+
+            .hide{
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-view">
+            <div class="login-view-item1">
+                <h3> Welcome to Home Page !</h3>
+            </div>
+            <div class="login-view-item2">
+                <div class="card">
+                    <div class="card-body">
+                        <form action='/login' method="POST">
+                            <div class="form-group">
+                              <label for="email-login">Email address</label>
+                              <input type="email" class="form-control" id="email-login" aria-describedby="emailHelp" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="password-login">Password</label>
+                              <input type="password" class="form-control" id="password-login" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                            <p id="signupBtn"> Dont have an account ? <a href="#"> Sign up !</a></p>
+                          </form>
+                    </div>
+                </div>
+            </div>
+            <div class="login-view-item3 hide">
+                <div class="card">
+                    <div class="card-body">
+                        <form action='/signup' method="POST">
+                            <div class="form-group">
+                              <label for="email-signup">Email address</label>
+                              <input type="email" class="form-control" id="email-signup" aria-describedby="emailHelp" required>
+                            </div>
+                            <div class="form-group">
+                              <label for="password-signup">Password</label>
+                              <input type="password" class="form-control" id="password-signup" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Sign up</button>
+                            <p id="loginBtn"> Already have an account ? <a href="#"> Login !</a></p>
+                          </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(function(){
+                $('#signupBtn').click(function(){
+                    $(".login-view-item2").addClass('hide');
+                    $(".login-view-item3").removeClass('hide');
+                });
+
+                $('#loginBtn').click(function(){
+                    $(".login-view-item3").addClass('hide');
+                    $(".login-view-item2").removeClass('hide');
+                });
+            });
+            
+        </script>
+    </body>
+</html>

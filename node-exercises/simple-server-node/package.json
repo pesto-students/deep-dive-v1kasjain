@@ -1,0 +1,14 @@
+{
+  "name": "simple-server-node",
+  "version": "1.0.0",
+  "description": "Build a minimal server that makes making APIs and serving files easier.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concat-stream": "^2.0.0"
+  }
+}
