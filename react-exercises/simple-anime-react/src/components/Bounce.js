@@ -1,17 +1,25 @@
 import React from "react";
 import "./Bounce.css";
 
-const Bounce = (props) => {
+const Bounce = ({
+  animationName = "bounce",
+  animationDuration = "1s",
+  animationDelay = "0s",
+  animationIterationCount = 1, 
+  ...rest
+}) => {
+  
   const anim = {
-    animationName: "bounce",
-    animationDuration: "1s",
-    animationDelay: "0s",
-    animationIterationCount: 1,
+    animationName,
+    animationDuration,
+    animationDelay,
+    animationIterationCount
   };
+  
   console.log(anim);
   return (
     <div className="bounce" style={anim}>
-      {props.children}
+      {rest.children}
     </div>
   );
 };

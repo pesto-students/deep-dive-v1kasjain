@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+.wrapper {
+  width: 610px;
+  height: 610px;
+  margin: auto;
+}
+
+.box {
+  width: 300px;
+  height: 300px;
+  float: left;
+  border:1px solid #000;
+  margin: 1px;;
+}
