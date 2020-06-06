@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Bounce from "./components/Bounce";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div style={{ marginTop: 100 }}>
+      <Bounce>
+        <div
+          style={{
+            width: 200,
+            height: 200,
+            borderRadius: 200,
+            borderWidth: 1,
+            borderStyle: "solid",
+            textAlign: "center"
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          T
+        </div>
+      </Bounce>
     </div>
   );
 }
