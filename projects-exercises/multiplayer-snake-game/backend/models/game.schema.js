@@ -2,19 +2,15 @@ const assert = require('assert');
 let Schema = null;
 
 function init() {
-
-  const userSchema = new Schema(
+  const gameSchema = new Schema(
     {
-      email: { type: String, required: true, unique: true },
-      is_active: { type: Boolean, default: true }
+      game_id: { type: String, required: true, unique: true },
+      details: [{ player_id: { type: String }, score: { type: Number } }]
     },
     { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
   );
 
-  userSchema.pre('save', function(next) {
-    return next();
-  });
-  return userSchema;
+  return gameSchema;
 }
 
 module.exports = (schema) => {

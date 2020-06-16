@@ -7,11 +7,14 @@ const Schema = mongoose.Schema;
 
 // loading all the models
 
-const User = mongoose.model('user', require('./user.schema')(Schema));
+const Game = mongoose.model('game', require('./game.schema')(Schema));
+const Player = mongoose.model('player', require('./player.schema')(Schema));
+
 
 // registring models
 const model = {
-  User
+  Game,
+  Player
 };
 
 module.exports = model;
