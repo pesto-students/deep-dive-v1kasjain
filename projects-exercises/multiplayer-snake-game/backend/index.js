@@ -5,15 +5,17 @@ require('./env.variables');
 require('./globals');
 
 const { mongoose, serverConfig } = require('./config');
-
+const socketIo = require('socket.io');
 try {
   mongoose.init();
 
   // Starting API Server
-  require('./web/server');
+  const server = require('./web/server');
+  const io = socketIo(server);
+
+  require('./sockets')(io);
 
   logger.info(`Environment: ${serverConfig.env}`);
-
 } catch (error) {
   logger.error(error);
 }

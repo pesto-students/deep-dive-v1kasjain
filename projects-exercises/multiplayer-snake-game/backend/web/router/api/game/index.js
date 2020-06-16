@@ -3,7 +3,7 @@ const getHandler = require('./get.handler');
 const updateHandler = require('./update.handler');
 
 module.exports = (router) => {
-  router.post('/user/update/:id', updateHandler);
-  router.post('/user/create', createHandler);
-  router.get('/user/:id', getHandler);
+  router.post('/game/update/:id', updateHandler);
+  router.post('/game/create', createHandler);
+  router.get('/game/:id', getHandler);
 };

@@ -1,13 +1,13 @@
 
-const User = rootRequire('models').User;
+const Game = rootRequire('models').Game;
 
 async function handler(req, res, next) {
 
-  const user = await User.find({});
+  const games = await Game.find({});
 
   res.json({
     success: true,
-    user
+    games
   });
 }
 module.exports = handler;

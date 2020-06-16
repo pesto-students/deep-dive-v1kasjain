@@ -2,6 +2,7 @@ const { express, serverConfig } = rootRequire('config');
 const { basic, handleError } = require('./middleware');
 
 const app = express();
+const server = require('http').Server(app);
 
 try {
   basic(app);
@@ -9,7 +10,7 @@ try {
   // mounting routes
   require('./router')(app);
 
-  app.listen(serverConfig.port, (err) => {
+  server.listen(serverConfig.port, (err) => {
     if (err) {
       logger.error(`Error while starting server at port ${serverConfig.port} | Error: ${err.message}`);
     }
@@ -18,4 +19,4 @@ try {
 } catch (error) {
   logger.error(error);
 }
-module.exports = app;
+module.exports = server;
