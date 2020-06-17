@@ -1,63 +1,49 @@
 import React, { useEffect, useRef } from 'react';
-import { drawAxisY, drawAxisX, drawChartTitle } from './helper';
-import { DEFAULT_CANVAS_SPACING } from './constants';
-
-const drawSingleBar = (ctx, startX, startY, width, height, color) => {
-  ctx.save();
+const color = '#263012';
+const drawSingleBlock = (ctx, startX, startY, width, height, color) => {
+  //ctx.save();
   ctx.fillStyle = color;
+  console.log(`${startX},  ${startY}, ${width}, ${height}`);
   ctx.fillRect(startX, startY, width, height);
-  ctx.restore();
+  //ctx.restore();
 };
 
-const drawBarChart = (chartOptions, canvasRef) => {
+const drawSnake = (snake, canvasRef) => {
   const canvas = canvasRef.current;
   const canvasOptions = {};
-  const snakeData = chartOptions.data;
+  canvasOptions.context = canvas.getContext('2d');
+  const snakeData = snake;
   const width = 500;
   const height = 500;
-  const canvasHeight = 500;
-  const canvasWidth = 500;
 
-  let barIndex = 0;
-  let colorIndex = 0;
-  for (let j = 0; j <= snakeData.length; j += 1) {
-    if (
-      snakeData[j] &&
-      snakeData[j]['data'] &&
-      snakeData[j]['data'][i] &&
-      snakeData[j]['data'][i][1]
-    ) {
-      const barHeight = Math.round((canvasHeight / maxHeight) * snakeData[j]['data'][i][1]);
-      const x = canvasOptions.padding + barIndex * barSize;
-      const y = height - barHeight - canvasOptions.padding;
-      console.log(`height => ${barHeight}, width => ${barSize} x => ${x} y => ${y}`);
-      drawSingleBar(canvasOptions.context, x, y, 10, 10, colors[colorIndex]);
-      barIndex++;
-    } else {
-      barIndex++;
-      continue;
+  
+  for (let j = 0; j < snakeData.length; j += 1) {
+    if (snakeData[j]) {
+      const x = snakeData[j]['x'];
+      const y = snakeData[j]['y'];
+      //console.log(`height => ${barHeight}, width => ${barSize} x => ${x} y => ${y}`);
+      drawSingleBlock(canvasOptions.context, x * 20, y * 20, 20, 20, color);
     }
-    colorIndex++;
   }
 };
 
-const BarChart = ({ chartOptions }) => {
+const SnakeCanvas = ({ snake, food }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    drawBarChart(chartOptions, canvasRef);
-  });
+    const canvas = canvasRef.current;
+    const canvasOptions = {};
+    canvasOptions.context = canvas.getContext('2d');
+    canvasOptions.context.clearRect(0, 0, 500, 500);
+    drawSnake(snake, canvasRef);
+    drawSingleBlock(canvasOptions.context, food.x * 20, food.y * 20, 30, 30, color);
+  }, [snake]);
 
   return (
     <div>
-      <canvas
-        className='canvas-bar'
-        ref={canvasRef}
-        width={chartOptions.chartWidth}
-        height={chartOptions.chartHeight}
-      />
+      <canvas className='canvas-bar' ref={canvasRef} width={400} height={400} style={{border: "1px solid #263012"}}/>
     </div>
   );
 };
 
-export default BarChart;
+export default SnakeCanvas;

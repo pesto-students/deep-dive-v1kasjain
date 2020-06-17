@@ -1,6 +1,7 @@
 import React from "react";
 
 const GameInput =  (key, direction, setDirection) => {
+  console.log('key pressed ', key);
   switch (key) {
     case 'ArrowUp':
       if (direction !== 'bottom') {
