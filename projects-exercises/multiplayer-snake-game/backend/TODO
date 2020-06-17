@@ -11,7 +11,9 @@ Screen2 -
  ^ Join game - enter game_id ->> takes to gameboard
    # io.emit('gamejoined',{players:[player_id,player_id]}) , update game record  in DB with player_id
 
+  
 Screen3 - is a gameboard with each game having unique game_id & multiple player_ids
+
 
 events - 
 
@@ -20,4 +22,16 @@ events -
 client - io.emit('getplayers') , server - .on("getplayers",  () { .emit("getplayers", players); });
 
 client - .emit("newplayer", player) , server - 
+
+
+.emit("move",{x,y,player_id_1})
+
+.emit("move",{x,y,player_id_2})
+
+.on("move",data)=> {
+
+.emit("move",)
+.emit("move",)
+
+}
 

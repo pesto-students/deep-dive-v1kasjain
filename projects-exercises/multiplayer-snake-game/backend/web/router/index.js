@@ -1,8 +1,9 @@
 const path = require("path");
 const router = require('express').Router();
 
-const { requestLogger } = require('../middleware');
+const { requestLogger , basic} = require('../middleware');
 
+basic(router)
 requestLogger(router);
 
 router.get('/', (req, res) => {
@@ -11,6 +12,8 @@ router.get('/', (req, res) => {
 
 require('./api/noAuth')(router);
 require('./api/game')(router);
+require('./api/players')(router);
+
 
 
 
