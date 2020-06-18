@@ -1,4 +1,3 @@
-import Socket from '../../services/sockets';
 import socketIOClient from 'socket.io-client';
 import { baseServerUrl } from '../../constants';
 
@@ -11,6 +10,11 @@ import { subscribeToTimer } from '../../Api';
 import SnakeCanvas from '../canvas/canvas';
 
 let socket = '';
+let gameId = '';
+let playerId = '';
+let gameType = '';
+let gameDetails = '';
+let position = [{ x: 10, y: 20 }];
 
 const Game = (props) => {
   const height = 20;
@@ -29,34 +33,29 @@ const Game = (props) => {
 
   useEffect(
     () => {
-      // type,gameId , gameDetails[]
-      console.log(props.location.state);
-
-      const gameType = props.location.state.gameType;
-      const gameId = props.location.state.gameId;
-      const gameDetails = props.location.state.gameDetails;
-
-      let position = [{ x: 10, y: 20 }];
-
-      console.log(gameDetails);
+      gameId = props.location.state.gameId;
+      playerId = props.location.state.playerId;
+      gameType = props.location.state.gameType;
+      gameDetails = props.location.state.gameDetails;
 
       socket = socketIOClient(baseServerUrl);
 
       // initi sockets
       initSocketEvents();
 
-      // if (gameType === 'newGame') {
-      //   socket.newGameStarted({ gameId, gameDetails, position });
-      // }
-      // if (gameType === 'joinGame') {
-      //   socket.gameJoined({ gameId, gameDetails, position });
-      // }
+      console.log('gameId', 'gameId', gameId);
 
-      // emit gamestarted event
+      if (gameType === 'newGame') {
+        emitEvent('newGameStarted', { gameId, playerId, position });
+      }
+      if (gameType === 'joinGame') {
+        emitEvent('gameJoined', { gameId, playerId, position });
+      }
 
       // cleanup
       return () => {
         // disconnect socket
+        socket.disconnect();
       };
     },
     [props.location.state.gameId]
@@ -125,6 +124,9 @@ const Game = (props) => {
 
       if (snake[0].x === food.x && snake[0].y === food.y) {
         setFood(randomPosition(width, height));
+
+        // send event when food is consumed by snake to
+        emitEvent('newFood', {});
       } else {
         newSnake.pop();
       }
@@ -133,27 +135,32 @@ const Game = (props) => {
       setSnake(newSnake);
       //setSnakeFoodInGrid();
 
-      // send emit event to server 
+      // send emit event to server
       // playerId , gameId , pos:[newSnake]
 
+      emitEvent('moved', { gameId, playerId, position: newSnake });
     }
+  };
+
+  const emitEvent = (eventName, config) => {
+    socket.emit(`${eventName}`, { ...config });
   };
 
   const initSocketEvents = () => {
     socket.on('connect', function() {
       // that.mySnake.id = socket.id;
       console.log('connect');
+      socket.emit('room', gameId);
     });
 
     // when a new snake enter
     socket.on('newGameStarted', function(position) {
-      console.log('newGameStarted',position);
+      console.log('newGameStarted', position);
       // position :[{x:0,y:0}] , playerId , gameId
-
     });
 
-    socket.on('gameJoined', function({position}) {
-      console.log('gameJoined',position);
+    socket.on('gameJoined', function({ position, playerId, gameId }) {
+      console.log('gameJoined', position, playerId, gameId);
       // position , playerId , gameId
       // position :[{x:100,y:100}]
     });
@@ -170,13 +177,12 @@ const Game = (props) => {
       // }
     });
 
-    socket.on('moved', function({remoteSnake}) {
-      console.log(remoteSnake);
-      
+    socket.on('moved', function({ gameId, playerId, position: remoteSnake }) {
+      // console.log(playerId,remoteSnake);
     });
 
-    socket.on('newfood', function(food) {
-      console.log(food);
+    socket.on('newFood', function({ gameId, playerId, position: newFoodPos }) {
+      console.log('newFood', newFoodPos);
       // let newFood = new Food();
       // newFood.x = food.x;
       // newFood.y = food.y;

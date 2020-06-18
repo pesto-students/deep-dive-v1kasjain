@@ -23,7 +23,7 @@ const GameSelection = (props) => {
       .then((result) => {
         console.log(result);
         if (result.success) {
-          navigate('/gameboard', { state: { gameId: result.gameId ,gameDetails:result.gameDetails ,gameType:'joinGame'} });
+          navigate('/gameboard', { state: {playerId, gameId: result.gameId ,gameDetails:result.gameDetails ,gameType:'joinGame'} });
         } else {
           showToastMessage(result.error);
         }
@@ -38,7 +38,7 @@ const GameSelection = (props) => {
       .then((result) => {
         console.log(result);
         if (result.success) {
-          navigate('/gameboard', { state: { gameId: result.gameId,gameDetails:result.gameDetails,gameType:'newGame' } });
+          navigate('/gameboard', { state: { playerId,gameId: result.gameId,gameDetails:result.gameDetails,gameType:'newGame' } });
         } else {
           showToastMessage(result.error);
         }

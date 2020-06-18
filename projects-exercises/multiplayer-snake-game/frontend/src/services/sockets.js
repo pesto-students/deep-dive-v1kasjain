@@ -14,6 +14,7 @@ export default class Socket {
     this.socket.emit('newGameStarted', { gameId, gameDetails, position });
     // this.socket.to(gameId).emit('newGameStarted', { gameId, gameDetails, position });
   }
+  
   getSocketId() {
     return this.socket.id;
   }
