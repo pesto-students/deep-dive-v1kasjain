@@ -3,7 +3,7 @@ const color = '#263012';
 const drawSingleBlock = (ctx, startX, startY, width, height, color) => {
   //ctx.save();
   ctx.fillStyle = color;
-  console.log(`${startX},  ${startY}, ${width}, ${height}`);
+  // console.log(`${startX},  ${startY}, ${width}, ${height}`);
   ctx.fillRect(startX, startY, width, height);
   //ctx.restore();
 };

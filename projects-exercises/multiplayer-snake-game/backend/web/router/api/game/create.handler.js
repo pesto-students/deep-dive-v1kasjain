@@ -16,7 +16,8 @@ async function handler(req, res, next) {
     res.json({
       success: true,
       message: 'Game create successfully',
-      gameId: result.game_id
+      gameId: result.game_id,
+      gameDetails:result.details
     });
 
   } catch (error) {

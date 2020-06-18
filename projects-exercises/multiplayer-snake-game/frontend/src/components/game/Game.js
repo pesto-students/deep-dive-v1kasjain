@@ -1,3 +1,5 @@
+import Socket from '../../services/sockets';
+
 import React, { useState, useEffect } from 'react';
 import GameStart from './GameStart';
 import GameOver from './GameOver';
@@ -6,7 +8,7 @@ import GameInput from './GameInput';
 import { subscribeToTimer } from '../../Api';
 import SnakeCanvas from '../canvas/canvas';
 
-const Game = () => {
+const Game = (props) => {
   const height = 20;
   const width = 20;
   const grid = getRowsColumns(height, width);
@@ -21,21 +23,43 @@ const Game = () => {
   const [score, setScore] = useState(0);
   const [timestamp, setTimestamp] = useState('no timestamp yet');
 
-  // useEffect(() => {
-  //   const [body] = document.getElementsByTagName('body');
-  //   handleGameInput(body);
-  // }, [direction]);
+  useEffect(
+    () => {
+      // type,gameId , gameDetails[]
+      console.log(props.location.state);
+
+      const gameType = props.location.state.gameType;
+      const gameId = props.location.state.gameId;
+      const gameDetails = props.location.state.gameDetails;
+      let position = [{ x: 10, y: 20 }];
+
+      console.log(gameDetails);
+
+      let socket = new Socket();
+
+      // initi sockets
+      socket.initSocketEvents();
+
+      if (gameType === 'newGame') {
+        socket.newGameStarted({ gameId, gameDetails, position });
+      }
+      if (gameType === 'joinGame') {
+        socket.gameJoined({ gameId, gameDetails, position });
+      }
+
+      // emit gamestarted event
+
+      // cleanup
+      return () => {
+        // disconnect socket
+      };
+    },
+    [props.location.state.gameId]
+  );
 
   useEffect(
     () => {
       window.addEventListener('keydown', ({ key }) => GameInput(key, direction, setDirection));
-      // subscribeToTimer((err, timestamp) => {
-      //   if (err) {
-      //     console.log(err)
-      //   }
-      //   setTimestamp(timestamp)
-      // });
-      // Remove event listeners on cleanup
       return () => {
         window.removeEventListener('keydown', GameInput);
       };
@@ -55,7 +79,7 @@ const Game = () => {
 
   const moveSnake = () => {
     if (startGame) {
-      console.log('DIRECTION ', direction);
+      // console.log('DIRECTION ', direction);
       const newSnake = [];
       switch (direction) {
         case 'right':
@@ -100,13 +124,13 @@ const Game = () => {
         newSnake.pop();
       }
       setScore(snake.length);
-      console.log(newSnake);
+      // console.log(newSnake);
       setSnake(newSnake);
       //setSnakeFoodInGrid();
     }
   };
 
-  console.log(snake);
+  // console.log(snake);
   useInterval(moveSnake, speed);
   //requestAnimationFrame(moveSnake);
 

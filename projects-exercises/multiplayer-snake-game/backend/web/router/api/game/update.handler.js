@@ -7,18 +7,22 @@ async function handler(req, res, next) {
     if (!game_id) throw Error('gameId not provided');
     if (!details || !details.length) throw Error('gameDetails not provided');
 
+    //  deep level check for duplicate player_id
     const game = await Game.findOne({ game_id });
 
     if (!game) throw Error('gameId not found');
 
-    game.details.push(details);
+    details.map((detail) => {
+      game.details.unshift(detail);
+    });
 
-   const result =  await game.save();
+    const result = await game.save();
 
     res.json({
       success: true,
       message: 'Game updated successfully',
-      gameId: game.game_id
+      gameId: result.game_id,
+      gameDetails:result.details
     });
   } catch (error) {
     res.json({
