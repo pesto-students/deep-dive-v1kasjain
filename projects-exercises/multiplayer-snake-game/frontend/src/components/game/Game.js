@@ -19,9 +19,10 @@ const Game = (props) => {
 
   const [rows, setRows] = useState(grid);
   const [snake, setSnake] = useState([{ x: 0, y: 0 }]);
+  const [remoteSnake, setRemoteSnake] = useState(null);
   const [food, setFood] = useState(randomPosition(width, height));
   const [direction, setDirection] = useState('right');
-  const [startGame, setStartGame] = useState(true);
+  const [startGame, setStartGame] = useState(false);
   const [speed, setSpeed] = useState(220);
   const [alive, setAlive] = useState(true);
   const [score, setScore] = useState(0);
@@ -146,14 +147,17 @@ const Game = (props) => {
     });
 
     // when a new snake enter
-    socket.on('newGameStarted', function(position) {
+    socket.on('newGameStarted', function({position}) {
       console.log('newGameStarted',position);
+      setSnake(position);
       // position :[{x:0,y:0}] , playerId , gameId
 
     });
 
     socket.on('gameJoined', function({position}) {
       console.log('gameJoined',position);
+      setRemoteSnake(position);
+      setStartGame(true);
       // position , playerId , gameId
       // position :[{x:100,y:100}]
     });
@@ -188,7 +192,7 @@ const Game = (props) => {
   useInterval(moveSnake, speed);
   //requestAnimationFrame(moveSnake);
 
-  return <SnakeCanvas snake={snake} food={food} />;
+  return <SnakeCanvas snake={[snake, remoteSnake]} food={food} />;
 };
 
 export default Game;

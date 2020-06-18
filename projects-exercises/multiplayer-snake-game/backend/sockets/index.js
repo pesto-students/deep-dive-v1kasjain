@@ -10,7 +10,7 @@ module.exports = function(io) {
     socket.emit('newGameStarted', { 'position': [{ x: 0, y: 0 }] });
 
     setTimeout(() => {
-      socket.emit('gameJoined', { 'position': [{ x: 100, y: 100 }] });
+      socket.emit('gameJoined', { 'position': [{ x: 10, y: 10 }] });
     }, 4000);
 
     socket.on('gameJoined', (d) => {
