@@ -16,7 +16,7 @@ const postApiCall = async ({ url, data }) => {
 
     return result;
   } catch (error) {
-    console.log(error);
+    console.log("error",error);
     return error;
   }
 };

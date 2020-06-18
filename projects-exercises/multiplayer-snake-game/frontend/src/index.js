@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {PlayerEntry, GameSelection} from './components'
+import {PlayerEntry, GameSelection , Game } from './components'
 import * as serviceWorker from './serviceWorker';
 import { Router } from '@reach/router'
 
@@ -12,6 +12,7 @@ ReactDOM.render(
      <App path="/" />
     <PlayerEntry  path="/playerentry"/>
     <GameSelection  path="/gameselection"/>
+    <Game path="/gameboard" />
   </Router>,
   document.getElementById('root')
 );

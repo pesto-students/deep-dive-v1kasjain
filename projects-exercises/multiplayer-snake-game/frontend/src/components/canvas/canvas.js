@@ -16,7 +16,6 @@ const drawSnake = (snake, canvasRef) => {
   const width = 500;
   const height = 500;
 
-  
   for (let j = 0; j < snakeData.length; j += 1) {
     if (snakeData[j]) {
       const x = snakeData[j]['x'];
@@ -30,18 +29,21 @@ const drawSnake = (snake, canvasRef) => {
 const SnakeCanvas = ({ snake, food }) => {
   const canvasRef = useRef(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const canvasOptions = {};
-    canvasOptions.context = canvas.getContext('2d');
-    canvasOptions.context.clearRect(0, 0, 500, 500);
-    drawSnake(snake, canvasRef);
-    drawSingleBlock(canvasOptions.context, food.x * 20, food.y * 20, 30, 30, color);
-  }, [snake]);
+  useEffect(
+    () => {
+      const canvas = canvasRef.current;
+      const canvasOptions = {};
+      canvasOptions.context = canvas.getContext('2d');
+      canvasOptions.context.clearRect(0, 0, 500, 500);
+      drawSnake(snake, canvasRef);
+      drawSingleBlock(canvasOptions.context, food.x * 20, food.y * 20, 30, 30, color);
+    },
+    [snake]
+  );
 
   return (
     <div>
-      <canvas className='canvas-bar' ref={canvasRef} width={400} height={400} style={{border: "1px solid #263012"}}/>
+      <canvas className="canvas-bar" ref={canvasRef} width={400} height={400} style={{ border: '1px solid #263012' }} />
     </div>
   );
 };
