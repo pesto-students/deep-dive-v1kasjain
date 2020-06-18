@@ -4,9 +4,12 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 const GameSelection = (props) => {
   const [playerId, setPlayerId] = useState('');
 
-  useEffect(() => {
-    setPlayerId(props.location.state.playerId);
-  }, []);
+  useEffect(
+    () => {
+      setPlayerId(props.location.state.playerId);
+    },
+    [props.location.state.playerId]
+  );
 
   return (
     <div>
