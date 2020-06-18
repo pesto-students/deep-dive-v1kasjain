@@ -35,7 +35,12 @@ const SnakeCanvas = ({ snake, food }) => {
       const canvasOptions = {};
       canvasOptions.context = canvas.getContext('2d');
       canvasOptions.context.clearRect(0, 0, 500, 500);
-      drawSnake(snake, canvasRef);
+      drawSnake(snake[0], canvasRef);
+      if (snake[1]) {
+        drawSnake(snake[1], canvasRef);
+      }
+     
+      
       drawSingleBlock(canvasOptions.context, food.x * 20, food.y * 20, 30, 30, color);
     },
     [snake]
