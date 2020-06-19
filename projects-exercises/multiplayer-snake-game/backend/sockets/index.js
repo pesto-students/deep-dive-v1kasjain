@@ -42,20 +42,34 @@ module.exports = function(io) {
     });
 
     socket.on('moved', (data) => {
-      console.table(['moved', data.playerId, data.position]);
+      // console.table(['moved', data.playerId, data.position]);
       io.sockets.in(data.gameId).emit('moved', data);
     });
 
     socket.on('newFood', (data) => {
       //  gameId, playerId, position
-
       const foodPosition = randomPosition(width, height);
-      // console.log('newFood', foodPosition);
-
       io.sockets.in(data.gameId).emit('newFood', { position: foodPosition });
 
-      io.sockets.in(data.gameId).emit('score', { gameDetails : [{playerId:1,score:1},{playerId:2,score:2}] });
+      const gameDetails = data.gameDetails;
 
+      const newGameDetails = gameDetails.map((detail) => {
+        const newDetail = {
+          score: detail.score,
+          player_id: detail.player_id
+        };
+        if (detail.player_id === data.playerId) {
+          newDetail.score = detail.score + 1;
+          newDetail.player_id = detail.player_id;
+        }
+        return newDetail;
+      });
+
+      console.log(newGameDetails)
+
+      io.sockets
+        .in(data.gameId)
+        .emit('score', { gameDetails: newGameDetails });
     });
 
     socket.on('disconnect', () => {

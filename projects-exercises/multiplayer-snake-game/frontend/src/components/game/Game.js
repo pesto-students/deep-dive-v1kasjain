@@ -4,7 +4,14 @@ import { BASESERVERURL } from '../../constants';
 import React, { useState, useEffect } from 'react';
 import GameStart from './GameStart';
 import GameOver from './GameOver';
-import { useGameLoop, randomPosition, getRowsColumns, displayGrid, useInterval, displayScore } from './GameHelper';
+import {
+  useGameLoop,
+  randomPosition,
+  getRowsColumns,
+  displayGrid,
+  useInterval,
+  displayScore
+} from './GameHelper';
 import GameInput from './GameInput';
 import { subscribeToTimer } from '../../Api';
 import SnakeCanvas from '../canvas/canvas';
@@ -17,12 +24,10 @@ let gameDetails = '';
 let position = [{ x: 10, y: 20 }];
 let gameMode = '';
 
-const Game = (props) => {
+const Game = props => {
   const height = 30;
   const width = 30;
-  const grid = getRowsColumns(height, width);
 
-  const [rows, setRows] = useState(grid);
   const [snake, setSnake] = useState([{ x: 0, y: 0 }]);
   const [remoteSnake, setRemoteSnake] = useState(null);
   const [food, setFood] = useState(randomPosition(width, height));
@@ -31,60 +36,44 @@ const Game = (props) => {
   const [speed, setSpeed] = useState(100);
   const [alive, setAlive] = useState(true);
   const [score, setScore] = useState(0);
+  const [remoteScore, setRemoteScore] = useState(0);
   const [timestamp, setTimestamp] = useState('no timestamp yet');
 
-  useEffect(
-    () => {
-      gameId = props.location.state.gameId;
-      playerId = props.location.state.playerId;
-      gameType = props.location.state.gameType;
-      gameDetails = props.location.state.gameDetails;
-      gameMode = props.location.state.gameMode;
+  useEffect(() => {
+    gameId = props.location.state.gameId;
+    playerId = props.location.state.playerId;
+    gameType = props.location.state.gameType;
+    gameDetails = props.location.state.gameDetails;
+    gameMode = props.location.state.gameMode;
+console.log(gameDetails);
+    socket = socketIOClient(BASESERVERURL);
 
-      socket = socketIOClient(BASESERVERURL);
+    // init sockets
+    initSocketEvents();
 
-      console.log(gameDetails,"gameDetails")
+    console.log('gameId', 'gameId', gameId, 'gameMode', gameMode);
 
-      // initi sockets
-      initSocketEvents();
+    if (gameType === 'newGame') {
+      emitEvent('newGameStarted', { gameId, playerId, position, gameDetails });
+    }
 
-      console.log('gameId', 'gameId', gameId, "gameMode",gameMode);
+    if (gameType === 'joinGame') {
+      emitEvent('gameJoined', { gameId, playerId, position, gameDetails });
+    }
 
-      if (gameType === 'newGame') {
-        emitEvent('newGameStarted', { gameId, playerId, position, gameDetails });
-      }
-      if (gameType === 'joinGame') {
-        emitEvent('gameJoined', { gameId, playerId, position, gameDetails });
-      }
+    // cleanup
+    return () => {
+      // disconnect socket
+      socket.disconnect();
+    };
+  }, [props.location.state.gameId]);
 
-      // cleanup
-      return () => {
-        // disconnect socket
-        socket.disconnect();
-      };
-    },
-    [props.location.state.gameId]
-  );
-
-  useEffect(
-    () => {
-      window.addEventListener('keydown', ({ key }) => GameInput(key, direction, setDirection));
-      return () => {
-        window.removeEventListener('keydown', GameInput);
-      };
-    },
-    [direction, setDirection]
-  );
-
-  const setSnakeFoodInGrid = () => {
-    const newRows = grid;
-    snake.forEach((cell) => {
-      newRows[cell.x][cell.y] = 'snake';
-    });
-
-    newRows[food.x][food.y] = 'food';
-    setRows(newRows);
-  };
+  useEffect(() => {
+    window.addEventListener('keydown', ({ key }) => GameInput(key, direction, setDirection));
+    return () => {
+      window.removeEventListener('keydown', GameInput);
+    };
+  }, [direction, setDirection]);
 
   const moveSnake = () => {
     if (startGame && snake && snake.length) {
@@ -93,9 +82,6 @@ const Game = (props) => {
       switch (direction) {
         case 'right':
           if (snake[0].x >= width) {
-            setSpeed(null);
-            setAlive(false);
-            console.log('boundery right', snake[0]);
             onBoundryTouched();
           } else {
             newSnake.push({ x: snake[0].x + 1, y: snake[0].y });
@@ -103,9 +89,6 @@ const Game = (props) => {
           break;
         case 'left':
           if (snake[0].x < 0) {
-            setSpeed(null);
-            setAlive(false);
-            console.log('boundery left', snake[0]);
             onBoundryTouched();
           } else {
             newSnake.push({ x: snake[0].x - 1, y: snake[0].y });
@@ -113,9 +96,6 @@ const Game = (props) => {
           break;
         case 'top':
           if (snake[0].y < 0) {
-            setSpeed(null);
-            setAlive(false);
-            console.log('boundery top', snake[0]);
             onBoundryTouched();
           } else {
             newSnake.push({ x: snake[0].x, y: snake[0].y - 1 });
@@ -123,28 +103,24 @@ const Game = (props) => {
           break;
         case 'bottom':
           if (snake[0].y >= height) {
-            setSpeed(null);
-            setAlive(false);
-            console.log('boundery bottom', snake[0]);
             onBoundryTouched();
           } else {
             newSnake.push({ x: snake[0].x, y: snake[0].y + 1 });
           }
       }
-      snake.forEach((cell) => {
+      snake.forEach(cell => {
         newSnake.push(cell);
       });
 
       detectCollision({ snakeHead: { x: snake[0].x, y: snake[0].y } });
 
       if (snake[0].x === food.x && snake[0].y === food.y) {
-        //setFood(randomPosition(width, height));
-
         // send event when food is consumed by snake to
         emitEvent('newFood', { gameId, playerId, gameDetails });
       } else {
         newSnake.pop();
       }
+
       setScore(snake.length);
       setSnake(newSnake);
       console.log('emitplayerId', playerId);
@@ -153,14 +129,15 @@ const Game = (props) => {
   };
 
   const detectCollision = ({ snakeHead }) => {
-    if(gameMode === 'singleplayer') return
-    remoteSnake.map((element) => {
+    if (gameMode === 'singleplayer') return;
+    remoteSnake.map(element => {
       if (snakeHead.x === element.x && snakeHead.y === element.y) {
         console.log('detectCollision');
+        setAlive(false);
         setStartGame(false);
         // TODO: game over
       }
-      return null
+      return null;
     });
   };
 
@@ -170,6 +147,8 @@ const Game = (props) => {
   const onBoundryTouched = () => {
     // socket disconnet , , winner decide and show on screen
     // TODO: game over
+    setAlive(false);
+    setStartGame(false);
     gameResult();
   };
   const emitEvent = (eventName, config) => {
@@ -177,14 +156,14 @@ const Game = (props) => {
   };
 
   const initSocketEvents = () => {
-    socket.on('connect', function() {
+    socket.on('connect', function () {
       // that.mySnake.id = socket.id;
       console.log('connect');
       socket.emit('room', gameId);
     });
 
     // when a new snake enter
-    socket.on('newGameStarted', function({ position }) {
+    socket.on('newGameStarted', function ({ position }) {
       console.log('newGameStarted', position);
 
       if(gameMode === 'singleplayer'){
@@ -198,7 +177,12 @@ const Game = (props) => {
       // position :[{x:0,y:0}] , playerId , gameId
     });
 
-    socket.on('gameJoined', function({ position, playerId: remotePlayerId, gameId, remotePosition }) {
+    socket.on('gameJoined', function ({
+      position,
+      playerId: remotePlayerId,
+      gameId,
+      remotePosition
+    }) {
       // console.table('gameJoined', 'position', position, 'remotePosition', remotePosition, 'gameDetails', gameDetails);
 
       emitEvent('newFood', { gameId,gameDetails,playerId });
@@ -214,33 +198,27 @@ const Game = (props) => {
       // position :[{x:100,y:100}]
     });
 
-  
-
-    socket.on('moved', function({ gameId, playerId: remotePlayerId, position: remoteSnake }) {
+    socket.on('moved', function ({ gameId, playerId: remotePlayerId, position: remoteSnake }) {
       // console.log('moved', playerId, remoteSnake[0]);
       if (remotePlayerId !== playerId) {
         setRemoteSnake(remoteSnake);
       }
     });
 
-    socket.on('score', function({ gameDetails: newGameDetails }) {
-      // / TODO: show score
+    socket.on('score', function ({ gameDetails: newGameDetails }) {
       console.log('score', newGameDetails);
+      for (const score of newGameDetails) {
+        if (score.playerId === playerId) {
+          setScore(score.score);
+        } else {
+          setRemoteScore(score.score);
+        }
+      }
 
       gameDetails = newGameDetails;
-
-      // let newFood = new Food();
-      // newFood.x = food.x;
-      // newFood.y = food.y;
-      // that.food = newFood;
     });
-    socket.on('newFood', function({ gameId, playerId, position: newFoodPos }) {
-      // console.log('newFood------------>', newFoodPos);
+    socket.on('newFood', function ({ gameId, playerId, position: newFoodPos }) {
       setFood(newFoodPos);
-      // let newFood = new Food();
-      // newFood.x = food.x;
-      // newFood.y = food.y;
-      // that.food = newFood;
     });
   };
 
@@ -249,7 +227,17 @@ const Game = (props) => {
   //requestAnimationFrame(moveSnake);
   useGameLoop(moveSnake);
 
-  return <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />;
+  //return <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />;
+  return (
+    <div>
+      <p>Your Score: {score}, Your Opponent Score: {remoteScore}  </p>
+      {alive ? (
+        <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />
+      ) : (
+        <GameOver alive={alive} />
+      )}
+    </div>
+  );
 };
 
 export default Game;
