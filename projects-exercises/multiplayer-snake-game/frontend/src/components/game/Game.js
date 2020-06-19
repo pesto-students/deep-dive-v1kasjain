@@ -158,7 +158,7 @@ const Game = (props) => {
     });
 
     socket.on('gameJoined', function({ position, playerId: remotePlayerId, gameId, remotePosition }) {
-      console.table('gameJoined', 'position', position, 'remotePosition', remotePosition);
+      console.table('gameJoined', 'position', position, 'remotePosition', remotePosition,"gameDetails",gameDetails);
 
       emitEvent('newFood', { gameId });
       if (remotePlayerId === playerId) {
