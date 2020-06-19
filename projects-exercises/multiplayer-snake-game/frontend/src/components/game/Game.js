@@ -43,6 +43,8 @@ const Game = (props) => {
 
       socket = socketIOClient(BASESERVERURL);
 
+      console.log(gameDetails,"gameDetails")
+
       // initi sockets
       initSocketEvents();
 
@@ -187,7 +189,7 @@ const Game = (props) => {
 
       if(gameMode === 'singleplayer'){
         console.log("gameMode === 'singleplayer'")
-        emitEvent('newFood', { gameId });
+        emitEvent('newFood', { gameId ,gameDetails, playerId});
         setSnake(position);
         setStartGame(true);
       }
@@ -199,7 +201,7 @@ const Game = (props) => {
     socket.on('gameJoined', function({ position, playerId: remotePlayerId, gameId, remotePosition }) {
       // console.table('gameJoined', 'position', position, 'remotePosition', remotePosition, 'gameDetails', gameDetails);
 
-      emitEvent('newFood', { gameId });
+      emitEvent('newFood', { gameId,gameDetails,playerId });
       if (remotePlayerId === playerId) {
         setSnake(position);
         setRemoteSnake(remotePosition);
