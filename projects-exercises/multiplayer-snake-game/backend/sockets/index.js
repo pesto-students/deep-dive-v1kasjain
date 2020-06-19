@@ -27,7 +27,6 @@ module.exports = function(io) {
     // }, 4000);
 
     socket.on('gameJoined', (data) => {
-      console.log('gameJoined', data);
       io.sockets.in(data.gameId).emit('gameJoined', {
         gameId: data.gameId,
         playerId: data.playerId,
@@ -38,7 +37,7 @@ module.exports = function(io) {
     });
 
     socket.on('newGameStarted', (d) => {
-      console.log('newGameStarted', d);
+      // console.log('newGameStarted', d);
     });
 
     socket.on('moved', (data) => {
@@ -65,8 +64,6 @@ module.exports = function(io) {
         }
         return newDetail;
       });
-
-      console.log(newGameDetails);
 
       io.sockets.in(data.gameId).emit('score', { gameDetails: newGameDetails });
     });

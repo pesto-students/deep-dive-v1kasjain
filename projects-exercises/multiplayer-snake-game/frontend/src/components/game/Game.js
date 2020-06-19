@@ -119,7 +119,7 @@ const Game = (props) => {
         newSnake.pop();
       }
 
-      setScore(snake.length);
+      // setScore(snake.length);
       setSnake(newSnake);
       console.log('emitplayerId', playerId);
       emitEvent('moved', { gameId, playerId, position: newSnake });
