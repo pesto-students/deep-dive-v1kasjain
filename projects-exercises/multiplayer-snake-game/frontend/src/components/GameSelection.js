@@ -71,7 +71,7 @@ const GameSelection = (props) => {
   };
 
   return (
-    <div>
+    <div  className="container">
       <br />
       <br />
       <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>

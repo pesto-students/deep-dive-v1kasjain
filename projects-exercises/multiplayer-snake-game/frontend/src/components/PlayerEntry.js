@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from '@reach/router';
 import { postApiCall } from '../services';
-import { Toast, Button , InputGroup,Spinner} from 'react-bootstrap';
+import { Toast, Button , InputGroup, Spinner, Container} from 'react-bootstrap';
 
 const PlayerEntry = (props) => {
   const navigate = useNavigate();
@@ -59,17 +59,17 @@ const PlayerEntry = (props) => {
   };
 
   return (
-    <div>
+    <div className="container">
       <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
         <Toast.Body>{errorMsg}</Toast.Body>
       </Toast>
 
-      <p> Enter Player Id </p>
+      <p>Enter Player Id </p>
       <input defaultValue={existingPlayerId} onInput={(e) => setExistingPlayerId(e.target.value)} />
       <Button onClick={submitPlayerId}>Submit</Button>
       <br />
       <p>OR</p>
-      <p>In case you do not have Player Id , create one below </p>
+      <p>In case you do not have Player Id, create one below </p>
       <p> Create Player Id </p>
       <input defaultValue={newPlayerId} onInput={(e) => setNewPlayerId(e.target.value)} />
       <Button onClick={createNewPlayerId}>Submit
