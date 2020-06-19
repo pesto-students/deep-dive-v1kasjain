@@ -45,7 +45,7 @@ const Game = props => {
     gameType = props.location.state.gameType;
     gameDetails = props.location.state.gameDetails;
     gameMode = props.location.state.gameMode;
-console.log(gameDetails);
+    console.log(gameDetails);
     socket = socketIOClient(BASESERVERURL);
 
     // init sockets
@@ -166,9 +166,9 @@ console.log(gameDetails);
     socket.on('newGameStarted', function ({ position }) {
       console.log('newGameStarted', position);
 
-      if(gameMode === 'singleplayer'){
-        console.log("gameMode === 'singleplayer'")
-        emitEvent('newFood', { gameId ,gameDetails, playerId});
+      if (gameMode === 'singleplayer') {
+        console.log("gameMode === 'singleplayer'");
+        emitEvent('newFood', { gameId, gameDetails, playerId });
         setSnake(position);
         setStartGame(true);
       }
@@ -185,7 +185,7 @@ console.log(gameDetails);
     }) {
       // console.table('gameJoined', 'position', position, 'remotePosition', remotePosition, 'gameDetails', gameDetails);
 
-      emitEvent('newFood', { gameId,gameDetails,playerId });
+      emitEvent('newFood', { gameId, gameDetails, playerId });
       if (remotePlayerId === playerId) {
         setSnake(position);
         setRemoteSnake(remotePosition);
@@ -208,7 +208,7 @@ console.log(gameDetails);
     socket.on('score', function ({ gameDetails: newGameDetails }) {
       console.log('score', newGameDetails);
       for (const score of newGameDetails) {
-        if (score.playerId === playerId) {
+        if (score.player_id === playerId) {
           setScore(score.score);
         } else {
           setRemoteScore(score.score);
@@ -230,7 +230,9 @@ console.log(gameDetails);
   //return <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />;
   return (
     <div>
-      <p>Your Score: {score}, Your Opponent Score: {remoteScore}  </p>
+      <p>
+        Your Score: {score}, Your Opponent Score: {remoteScore}{' '}
+      </p>
       {alive ? (
         <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />
       ) : (
