@@ -1,12 +1,8 @@
 import React from 'react';
 
 const GameStart = ({startGame, setStartGame, setSpeed, gameId}) => {
-  const start = () => {
-    setStartGame(false);
-    setSpeed(150);
-  };
   return (
-    <div className={startGame ? 'startGame' : 'onGame'}>
+    <div className="startGame">
       <h1>
         <span className={'food'}></span>
         Snake

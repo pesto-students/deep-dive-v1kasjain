@@ -229,7 +229,7 @@ const Game = (props) => {
             <GameOver alive={alive} />
           )}
         </div>
-      ) : (
+      ) : alive === false ? <GameOver alive={alive} /> :(
         <GameStart gameId={gameId}/>
       )}
     </div>
