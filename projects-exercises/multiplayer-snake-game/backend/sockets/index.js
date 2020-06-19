@@ -1,5 +1,5 @@
-const height = 20;
-const width = 20;
+const height = 30;
+const width = 30;
 const randomPosition = (width, height) => {
   const position = {
     x: Math.floor(Math.random() * width),
@@ -51,7 +51,11 @@ module.exports = function(io) {
 
       const foodPosition = randomPosition(width, height);
       // console.log('newFood', foodPosition);
+
       io.sockets.in(data.gameId).emit('newFood', { position: foodPosition });
+
+      io.sockets.in(data.gameId).emit('score', { gameDetails : [{playerId:1,score:1},{playerId:2,score:2}] });
+
     });
 
     socket.on('disconnect', () => {

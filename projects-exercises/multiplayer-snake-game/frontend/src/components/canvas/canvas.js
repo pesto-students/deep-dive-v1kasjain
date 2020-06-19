@@ -33,7 +33,7 @@ const SnakeCanvas = ({ snakes, food }) => {
     const canvas = canvasRef.current;
     const canvasOptions = {};
     canvasOptions.context = canvas.getContext('2d');
-    canvasOptions.context.clearRect(0, 0, 500, 500);
+    canvasOptions.context.clearRect(0, 0, 600, 600);
 
     let i = 0;
     for (const snake of snakes) {
@@ -51,8 +51,8 @@ const SnakeCanvas = ({ snakes, food }) => {
       <canvas
         className='canvas-bar'
         ref={canvasRef}
-        width={400}
-        height={400}
+        width={600}
+        height={600}
         style={{ border: '1px solid #263012' }}
       />
     </div>

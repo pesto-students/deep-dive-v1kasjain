@@ -77,7 +77,7 @@ function useInterval(callback, delay) {
 let previousTime = 0;
 
 const useGameLoop = (moveSnake) => {
-  const rafRef = useRef();
+  const frameRef = useRef();
   const savedCallback = useRef();
 
   // Remember the latest callback.
@@ -90,15 +90,15 @@ const useGameLoop = (moveSnake) => {
 
   useEffect(
     () => {
-      rafRef.current = requestAnimationFrame(function animate(currentTime) {
+      frameRef.current = requestAnimationFrame(function animate(currentTime) {
         if (currentTime - previousTime > GAMEFRAMESPEED) {
           savedCallback.current();
           previousTime = currentTime;
         }
-        rafRef.current = requestAnimationFrame(animate);
+        frameRef.current = requestAnimationFrame(animate);
       });
       return () => {
-        cancelAnimationFrame(rafRef.current);
+        cancelAnimationFrame(frameRef.current);
       };
     },
     [moveSnake]
