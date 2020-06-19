@@ -45,6 +45,11 @@ module.exports = function(io) {
       io.sockets.in(data.gameId).emit('moved', data);
     });
 
+    socket.on('gameover', (data) => {
+      // console.table(['moved', data.playerId, data.position]);
+      io.sockets.in(data.gameId).emit('gameover', data);
+    });
+
     socket.on('newFood', (data) => {
       //  gameId, playerId, position
       const foodPosition = randomPosition(width, height);

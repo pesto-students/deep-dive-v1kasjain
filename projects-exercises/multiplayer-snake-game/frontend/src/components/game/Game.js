@@ -31,6 +31,7 @@ const Game = (props) => {
   const [score, setScore] = useState(0);
   const [remoteScore, setRemoteScore] = useState(0);
   const [timestamp, setTimestamp] = useState('no timestamp yet');
+  const [gameIdState,setGameIdState] = useState('')
 
   useEffect(() => {
     gameId = props.location.state.gameId;
@@ -38,7 +39,9 @@ const Game = (props) => {
     gameType = props.location.state.gameType;
     gameDetails = props.location.state.gameDetails;
     gameMode = props.location.state.gameMode;
-    console.log(gameDetails);
+    
+    setGameIdState(gameId)
+
     socket = socketIOClient(BASESERVERURL);
 
       // init sockets
@@ -133,6 +136,7 @@ const Game = (props) => {
         console.log('detectCollision');
         setAlive(false);
         setStartGame(false);
+        emitEvent('gameover', { });
       }
       return null;
     });
@@ -145,8 +149,12 @@ const Game = (props) => {
     // socket disconnet , , winner decide and show on screen
     // TODO: game over
     setAlive(false);
+    emitEvent('gameover', { });
     setStartGame(false);
+
+    // TODO
     gameResult();
+
   };
   const emitEvent = (eventName, config) => {
     socket.emit(`${eventName}`, { ...config });
@@ -208,6 +216,10 @@ const Game = (props) => {
     socket.on('newFood', function({ gameId, playerId, position: newFoodPos }) {
       setFood(newFoodPos);
     });
+    socket.on('gameover', function({}) {
+      console.log("gameover")
+      setAlive(false);
+    });
   };
 
   // console.log(snake);
@@ -217,7 +229,7 @@ const Game = (props) => {
 
   //return <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />;
   return (
-    <div>
+    <div className="container">
       {startGame ? (
         <div>
           <p>
@@ -230,7 +242,7 @@ const Game = (props) => {
           )}
         </div>
       ) : alive === false ? <GameOver alive={alive} /> :(
-        <GameStart gameId={gameId}/>
+        <GameStart gameId={gameIdState}/>
       )}
     </div>
   );
