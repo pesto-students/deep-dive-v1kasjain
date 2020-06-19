@@ -135,7 +135,6 @@ const Game = props => {
         console.log('detectCollision');
         setAlive(false);
         setStartGame(false);
-        // TODO: game over
       }
       return null;
     });
@@ -157,7 +156,6 @@ const Game = props => {
 
   const initSocketEvents = () => {
     socket.on('connect', function () {
-      // that.mySnake.id = socket.id;
       console.log('connect');
       socket.emit('room', gameId);
     });
@@ -194,12 +192,9 @@ const Game = props => {
         setRemoteSnake(position);
       }
       setStartGame(true);
-      // position , playerId , gameId
-      // position :[{x:100,y:100}]
     });
 
     socket.on('moved', function ({ gameId, playerId: remotePlayerId, position: remoteSnake }) {
-      // console.log('moved', playerId, remoteSnake[0]);
       if (remotePlayerId !== playerId) {
         setRemoteSnake(remoteSnake);
       }
@@ -230,13 +225,19 @@ const Game = props => {
   //return <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />;
   return (
     <div>
-      <p>
-        Your Score: {score}, Your Opponent Score: {remoteScore}{' '}
-      </p>
-      {alive ? (
-        <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />
+      {startGame ? (
+        <div>
+          <p>
+            Your Score: {score}, Your Opponent Score: {remoteScore}{' '}
+          </p>
+          {alive ? (
+            <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />
+          ) : (
+            <GameOver alive={alive} />
+          )}
+        </div>
       ) : (
-        <GameOver alive={alive} />
+        <GameStart />
       )}
     </div>
   );

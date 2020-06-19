@@ -11,10 +11,7 @@ const GameStart = (startGame, setStartGame, setSpeed) => {
       Snake
        <span className={'food'}></span>
     </h1>
-    <h3>Choose Level:</h3>
-    <button className={'slug'} onClick={start}>SLUG</button>
-    <button className={'worm'} onClick={start}>WORM</button>
-    <button className={'python'} onClick={start}>PYTHON</button>
+    <h3>Waiting for other player to join</h3>
   </div>
 };
 
