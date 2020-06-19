@@ -9,7 +9,8 @@ import { Router } from '@reach/router'
 ReactDOM.render(
  
    <Router>
-     <App path="/" />
+     {/* <App path="/" /> */}
+     <PlayerEntry  path="/"/>
     <PlayerEntry  path="/playerentry"/>
     <GameSelection  path="/gameselection"/>
     <Game path="/gameboard" />

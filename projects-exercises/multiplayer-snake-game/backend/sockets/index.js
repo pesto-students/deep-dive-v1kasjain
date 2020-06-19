@@ -43,7 +43,7 @@ module.exports = function (io) {
     });
 
     socket.on('moved', data => {
-      console.log('moved', data);
+      console.table(['moved',data.playerId, data.position,]);
       io.sockets.in(data.gameId).emit('moved', data);
     });
 
@@ -51,7 +51,7 @@ module.exports = function (io) {
       //  gameId, playerId, position
 
       const foodPosition = randomPosition(width, height);
-      console.log('newFood', foodPosition);
+      // console.log('newFood', foodPosition);
       io.sockets.in(data.gameId).emit('newFood', { 'position': foodPosition });
     });
 
