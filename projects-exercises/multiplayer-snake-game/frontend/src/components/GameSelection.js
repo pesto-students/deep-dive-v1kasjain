@@ -57,7 +57,7 @@ const GameSelection = (props) => {
   };
 
   const showToastMessage = (msg) => {
-    setErrorMsg(msg.toUpperCase());
+    setErrorMsg(msg);
     setShowToast(true);
   };
 

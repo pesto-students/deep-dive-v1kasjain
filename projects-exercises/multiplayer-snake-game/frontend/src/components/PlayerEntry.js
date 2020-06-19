@@ -53,7 +53,7 @@ const PlayerEntry = (props) => {
   };
 
   const showToastMessage = (msg) => {
-    setErrorMsg(msg.toUpperCase());
+    setErrorMsg( msg);
     setErrorMsg(msg);
     setShowToast(true);
   };
