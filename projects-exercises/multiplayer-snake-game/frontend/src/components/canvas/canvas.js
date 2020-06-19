@@ -8,7 +8,7 @@ const drawSingleBlock = (ctx, startX, startY, width, height, color) => {
   //ctx.restore();
 };
 
-const drawSnake = (snake, canvasRef) => {
+const drawSnake = (snake, color, canvasRef) => {
   const canvas = canvasRef.current;
   const canvasOptions = {};
   canvasOptions.context = canvas.getContext('2d');
@@ -26,29 +26,35 @@ const drawSnake = (snake, canvasRef) => {
   }
 };
 
-const SnakeCanvas = ({ snake, food }) => {
+const SnakeCanvas = ({ snakes, food }) => {
   const canvasRef = useRef(null);
+  const colors = ['#ff0000', '#00ff00', '#0000ff'];
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const canvasOptions = {};
+    canvasOptions.context = canvas.getContext('2d');
+    canvasOptions.context.clearRect(0, 0, 500, 500);
 
-  useEffect(
-    () => {
-      const canvas = canvasRef.current;
-      const canvasOptions = {};
-      canvasOptions.context = canvas.getContext('2d');
-      canvasOptions.context.clearRect(0, 0, 500, 500);
-      drawSnake(snake[0], canvasRef);
-      if (snake[1]) {
-        drawSnake(snake[1], canvasRef);
+    let i = 0;
+    for (const snake of snakes) {
+      if (snake) {
+        drawSnake(snake, colors[i], canvasRef);
       }
-     
-      
-      drawSingleBlock(canvasOptions.context, food.x * 20, food.y * 20, 30, 30, color);
-    },
-    [snake]
-  );
+      i++;
+    }
+
+    drawSingleBlock(canvasOptions.context, food.x * 20, food.y * 20, 20, 20, color);
+  }, [snakes]);
 
   return (
     <div>
-      <canvas className="canvas-bar" ref={canvasRef} width={400} height={400} style={{ border: '1px solid #263012' }} />
+      <canvas
+        className='canvas-bar'
+        ref={canvasRef}
+        width={400}
+        height={400}
+        style={{ border: '1px solid #263012' }}
+      />
     </div>
   );
 };
