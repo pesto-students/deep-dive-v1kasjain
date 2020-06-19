@@ -8,11 +8,11 @@ const randomPosition = (width, height) => {
   return position;
 };
 
-module.exports = function (io) {
-  io.on('connection', socket => {
+module.exports = function(io) {
+  io.on('connection', (socket) => {
     // console.log('New client connected',socket.id);
 
-    socket.on('room', function (room) {
+    socket.on('room', function(room) {
       socket.join(room);
     });
 
@@ -26,34 +26,32 @@ module.exports = function (io) {
     //   socket.emit('gameJoined', { position: [{ x: 100, y: 100 }] });
     // }, 4000);
 
-    socket.on('gameJoined', data => {
+    socket.on('gameJoined', (data) => {
       console.log('gameJoined', data);
-      io.sockets
-        .in(data.gameId)
-        .emit('gameJoined', {
-          gameId: data.gameId,
-          playerId: data.playerId,
-          position: [{ x: 0, y: 0 }],
-          remotePosition: [{ x: 10, y: 10 }],
-          gameDetails:data.gameDetails
-        });
+      io.sockets.in(data.gameId).emit('gameJoined', {
+        gameId: data.gameId,
+        playerId: data.playerId,
+        position: [{ x: 0, y: 0 }],
+        remotePosition: [{ x: 10, y: 10 }],
+        gameDetails: data.gameDetails
+      });
     });
 
-    socket.on('newGameStarted', d => {
+    socket.on('newGameStarted', (d) => {
       console.log('newGameStarted', d);
     });
 
-    socket.on('moved', data => {
-      console.table(['moved',data.playerId, data.position,]);
+    socket.on('moved', (data) => {
+      console.table(['moved', data.playerId, data.position]);
       io.sockets.in(data.gameId).emit('moved', data);
     });
 
-    socket.on('newFood', data => {
+    socket.on('newFood', (data) => {
       //  gameId, playerId, position
 
       const foodPosition = randomPosition(width, height);
       // console.log('newFood', foodPosition);
-      io.sockets.in(data.gameId).emit('newFood', { 'position': foodPosition });
+      io.sockets.in(data.gameId).emit('newFood', { position: foodPosition });
     });
 
     socket.on('disconnect', () => {

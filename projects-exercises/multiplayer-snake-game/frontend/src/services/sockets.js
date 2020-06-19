@@ -1,9 +1,9 @@
 import socketIOClient from 'socket.io-client';
-import { baseServerUrl } from '../constants';
+import { BASESERVERURL } from '../constants';
 
 export default class Socket {
   constructor() {
-    this.socket = socketIOClient(baseServerUrl);
+    this.socket = socketIOClient(BASESERVERURL);
   }
 
   gameJoined({ gameId, gameDetails, position }) {
@@ -14,7 +14,7 @@ export default class Socket {
     this.socket.emit('newGameStarted', { gameId, gameDetails, position });
     // this.socket.to(gameId).emit('newGameStarted', { gameId, gameDetails, position });
   }
-  
+
   getSocketId() {
     return this.socket.id;
   }
@@ -77,9 +77,6 @@ export default class Socket {
     });
 
     this.socket.on('newfood', function(food) {
-
-      
-
       console.log(food);
       // let newFood = new Food();
       // newFood.x = food.x;

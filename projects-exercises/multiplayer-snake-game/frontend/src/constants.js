@@ -1,5 +1,6 @@
-const baseServerUrl = 'http://localhost:7001'
-
+const BASESERVERURL = 'http://localhost:7001'
+const GAMEFRAMESPEED = 300
 export {
-  baseServerUrl
+  BASESERVERURL,
+  GAMEFRAMESPEED
 }

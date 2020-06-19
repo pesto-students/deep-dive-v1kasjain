@@ -1,5 +1,5 @@
-import React, {useEffect, useRef} from "react";
-
+import React, { useEffect, useRef } from 'react';
+import { GAMEFRAMESPEED } from '../../constants';
 const randomPosition = (width, height) => {
   const position = {
     x: Math.floor(Math.random() * width),
@@ -20,25 +20,32 @@ const getRowsColumns = (height, width) => {
 };
 
 const displayGrid = (rowsColumns) => {
-  return rowsColumns.map((row, rowIndex) =>
+  return rowsColumns.map((row, rowIndex) => (
     <div key={rowIndex}>
       {row.map((column, i) => {
         switch (column) {
           case 'blankColumn':
             return <span key={i}>&nbsp;</span>;
           case 'snake':
-            return <span className={'snake'} key={i}>&nbsp;</span>;
+            return (
+              <span className={'snake'} key={i}>
+                &nbsp;
+              </span>
+            );
           case 'food':
-            return <span className={'food'} key={i}>&nbsp;</span>
+            return (
+              <span className={'food'} key={i}>
+                &nbsp;
+              </span>
+            );
         }
-      })
-      }
+      })}
     </div>
-  );
+  ));
 };
 
 const displayScore = (score) => {
-  return <div className={'scoreBox'}>Score: {score}</div>
+  return <div className={'scoreBox'}>Score: {score}</div>;
 };
 
 function useInterval(callback, delay) {
@@ -67,10 +74,35 @@ function useInterval(callback, delay) {
   );
 }
 
-export {
-  randomPosition,
-  getRowsColumns,
-  displayGrid,
-  useInterval,
-  displayScore
-}
+let previousTime = 0;
+
+const useGameLoop = (moveSnake) => {
+  const rafRef = useRef();
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(
+    () => {
+      savedCallback.current = moveSnake;
+    },
+    [moveSnake]
+  );
+
+  useEffect(
+    () => {
+      rafRef.current = requestAnimationFrame(function animate(currentTime) {
+        if (currentTime - previousTime > GAMEFRAMESPEED) {
+          savedCallback.current();
+          previousTime = currentTime;
+        }
+        rafRef.current = requestAnimationFrame(animate);
+      });
+      return () => {
+        cancelAnimationFrame(rafRef.current);
+      };
+    },
+    [moveSnake]
+  );
+};
+
+export { randomPosition, getRowsColumns, displayGrid, useInterval, displayScore, useGameLoop };

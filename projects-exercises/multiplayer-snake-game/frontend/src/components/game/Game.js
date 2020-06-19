@@ -1,10 +1,10 @@
 import socketIOClient from 'socket.io-client';
-import { baseServerUrl } from '../../constants';
+import { BASESERVERURL } from '../../constants';
 
 import React, { useState, useEffect } from 'react';
 import GameStart from './GameStart';
 import GameOver from './GameOver';
-import { randomPosition, getRowsColumns, displayGrid, useInterval, displayScore } from './GameHelper';
+import { useGameLoop, randomPosition, getRowsColumns, displayGrid, useInterval, displayScore } from './GameHelper';
 import GameInput from './GameInput';
 import { subscribeToTimer } from '../../Api';
 import SnakeCanvas from '../canvas/canvas';
@@ -39,7 +39,7 @@ const Game = (props) => {
       gameType = props.location.state.gameType;
       gameDetails = props.location.state.gameDetails;
 
-      socket = socketIOClient(baseServerUrl);
+      socket = socketIOClient(BASESERVERURL);
 
       // initi sockets
       initSocketEvents();
@@ -47,10 +47,10 @@ const Game = (props) => {
       console.log('gameId', 'gameId', gameId);
 
       if (gameType === 'newGame') {
-        emitEvent('newGameStarted', { gameId, playerId, position , gameDetails });
+        emitEvent('newGameStarted', { gameId, playerId, position, gameDetails });
       }
       if (gameType === 'joinGame') {
-        emitEvent('gameJoined', { gameId, playerId, position , gameDetails });
+        emitEvent('gameJoined', { gameId, playerId, position, gameDetails });
       }
 
       // cleanup
@@ -158,7 +158,7 @@ const Game = (props) => {
     });
 
     socket.on('gameJoined', function({ position, playerId: remotePlayerId, gameId, remotePosition }) {
-      console.table('gameJoined', 'position', position, 'remotePosition', remotePosition,"gameDetails",gameDetails);
+      console.table('gameJoined', 'position', position, 'remotePosition', remotePosition, 'gameDetails', gameDetails);
 
       emitEvent('newFood', { gameId });
       if (remotePlayerId === playerId) {
@@ -203,8 +203,9 @@ const Game = (props) => {
   };
 
   // console.log(snake);
-  useInterval(moveSnake, speed);
+  // useInterval(moveSnake, speed);
   //requestAnimationFrame(moveSnake);
+  useGameLoop(moveSnake);
 
   return <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />;
 };
