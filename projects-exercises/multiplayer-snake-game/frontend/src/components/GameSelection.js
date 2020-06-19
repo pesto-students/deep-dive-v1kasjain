@@ -11,6 +11,8 @@ const GameSelection = (props) => {
   const [showToast, setShowToast] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [gameMode,setGameMode]=useState('multiplayer')
+
   useEffect(
     () => {
       setPlayerId(props.location.state.playerId);
@@ -19,11 +21,13 @@ const GameSelection = (props) => {
   );
 
   const joinGame = () => {
-    postApiCall({ data: { gameId: gameId, gameDetails: [{ player_id:playerId, score: 0 }] }, url: '/game/update' })
+    postApiCall({ data: { gameId: gameId, gameDetails: [{ player_id: playerId, score: 0 }] }, url: '/game/update' })
       .then((result) => {
         console.log(result);
         if (result.success) {
-          navigate('/gameboard', { state: {playerId, gameId: result.gameId ,gameDetails:result.gameDetails ,gameType:'joinGame'} });
+          navigate('/gameboard', {
+            state: { playerId, gameId: result.gameId, gameDetails: result.gameDetails, gameType: 'joinGame',gameMode:result.gameMode }
+          });
         } else {
           showToastMessage(result.error);
         }
@@ -34,11 +38,14 @@ const GameSelection = (props) => {
       });
   };
   const startNewGame = () => {
-    postApiCall({ data: { gameDetails: [{ player_id:playerId, score: 0 }] }, url: '/game/create' })
+    console.log("gameMode",gameMode)
+    postApiCall({ data: {gameMode:gameMode, gameDetails: [{ player_id: playerId, score: 0 }] }, url: '/game/create', })
       .then((result) => {
         console.log(result);
         if (result.success) {
-          navigate('/gameboard', { state: { playerId,gameId: result.gameId,gameDetails:result.gameDetails,gameType:'newGame' } });
+          navigate('/gameboard', {
+            state: { playerId, gameId: result.gameId, gameDetails: result.gameDetails, gameType: 'newGame',gameMode }
+          });
         } else {
           showToastMessage(result.error);
         }
@@ -54,10 +61,19 @@ const GameSelection = (props) => {
     setShowToast(true);
   };
 
+  const onSelectModeSingle = () => {
+    console.log("onSelectModeSingle")
+    setGameMode('singleplayer')
+  };
+  const onSelectModeMultiPlayer = () => {
+    console.log("onSelectModeMultiPlayer")
+    setGameMode('multiplayer')
+  };
+
   return (
     <div>
-      <br/>
-      <br/>
+      <br />
+      <br />
       <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
         <Toast.Body>{errorMsg}</Toast.Body>
       </Toast>
@@ -65,15 +81,19 @@ const GameSelection = (props) => {
       <p>playerId : {playerId}</p>
       <p>Select Mode </p>
       <ButtonGroup aria-label="Basic example">
-        {/* <Button variant="secondary">Single</Button> */}
-        <Button variant="secondary">Multiplayer</Button>
+        <Button variant="secondary" onClick={onSelectModeSingle}>
+          Single
+        </Button>
+        <Button variant="secondary" onClick={onSelectModeMultiPlayer}>
+          Multiplayer
+        </Button>
       </ButtonGroup>
       <br />
       <Button onClick={startNewGame}>Start New Game</Button>
       <br />
 
       <p>Enter Game Id</p>
-      <input value={gameId} onInput={(e) => setGameId(e.target.value)} />
+      <input defaultValue={gameId} onInput={(e) => setGameId(e.target.value)} />
       <Button variant="primary" onClick={joinGame}>
         Join Game
       </Button>

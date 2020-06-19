@@ -22,7 +22,8 @@ async function handler(req, res, next) {
       success: true,
       message: 'Game updated successfully',
       gameId: result.game_id,
-      gameDetails:result.details
+      gameDetails:result.details,
+      gameMode: result.game_mode ? result.game_mode : 'multiplayer'
     });
   } catch (error) {
     res.json({

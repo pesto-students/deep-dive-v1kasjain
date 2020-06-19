@@ -16,11 +16,11 @@ module.exports = function(io) {
       socket.join(room);
     });
 
-    socket.emit('newfood', { newfood: 'newfood' });
-    socket.emit('newsnake', { newsnake: 'newsnake' });
-    socket.emit('getsnakes', { getsnakes: 'getsnakes' });
+    // socket.emit('newfood', { newfood: 'newfood' });
+    // socket.emit('newsnake', { newsnake: 'newsnake' });
+    // socket.emit('getsnakes', { getsnakes: 'getsnakes' });
 
-    socket.emit('newGameStarted', { position: [{ x: 0, y: 0 }] });
+    // socket.emit('newGameStarted', { position: [{ x: 0, y: 0 }] });
 
     // setTimeout(() => {
     //   socket.emit('gameJoined', { position: [{ x: 100, y: 100 }] });
