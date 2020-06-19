@@ -34,7 +34,8 @@ module.exports = function (io) {
           gameId: data.gameId,
           playerId: data.playerId,
           position: [{ x: 0, y: 0 }],
-          remotePosition: [{ x: 10, y: 10 }]
+          remotePosition: [{ x: 10, y: 10 }],
+          gameDetails:data.gameDetails
         });
     });
 

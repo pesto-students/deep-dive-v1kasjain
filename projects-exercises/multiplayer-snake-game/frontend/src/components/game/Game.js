@@ -27,7 +27,7 @@ const Game = (props) => {
   const [food, setFood] = useState(randomPosition(width, height));
   const [direction, setDirection] = useState('right');
   const [startGame, setStartGame] = useState(false);
-  const [speed, setSpeed] = useState(3000);
+  const [speed, setSpeed] = useState(100);
   const [alive, setAlive] = useState(true);
   const [score, setScore] = useState(0);
   const [timestamp, setTimestamp] = useState('no timestamp yet');
@@ -47,10 +47,10 @@ const Game = (props) => {
       console.log('gameId', 'gameId', gameId);
 
       if (gameType === 'newGame') {
-        emitEvent('newGameStarted', { gameId, playerId, position });
+        emitEvent('newGameStarted', { gameId, playerId, position , gameDetails });
       }
       if (gameType === 'joinGame') {
-        emitEvent('gameJoined', { gameId, playerId, position });
+        emitEvent('gameJoined', { gameId, playerId, position , gameDetails });
       }
 
       // cleanup
