@@ -52,24 +52,23 @@ module.exports = function(io) {
       io.sockets.in(data.gameId).emit('newFood', { position: foodPosition });
 
       const gameDetails = data.gameDetails;
+      const updateScore = data.updateScore;
 
       const newGameDetails = gameDetails.map((detail) => {
         const newDetail = {
           score: detail.score,
           player_id: detail.player_id
         };
-        if (detail.player_id === data.playerId) {
+        if (detail.player_id === data.playerId && updateScore === true) {
           newDetail.score = detail.score + 1;
           newDetail.player_id = detail.player_id;
         }
         return newDetail;
       });
 
-      console.log(newGameDetails)
+      console.log(newGameDetails);
 
-      io.sockets
-        .in(data.gameId)
-        .emit('score', { gameDetails: newGameDetails });
+      io.sockets.in(data.gameId).emit('score', { gameDetails: newGameDetails });
     });
 
     socket.on('disconnect', () => {

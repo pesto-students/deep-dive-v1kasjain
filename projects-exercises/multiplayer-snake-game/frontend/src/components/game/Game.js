@@ -4,14 +4,7 @@ import { BASESERVERURL } from '../../constants';
 import React, { useState, useEffect } from 'react';
 import GameStart from './GameStart';
 import GameOver from './GameOver';
-import {
-  useGameLoop,
-  randomPosition,
-  getRowsColumns,
-  displayGrid,
-  useInterval,
-  displayScore
-} from './GameHelper';
+import { useGameLoop, randomPosition, getRowsColumns, displayGrid, useInterval, displayScore } from './GameHelper';
 import GameInput from './GameInput';
 import { subscribeToTimer } from '../../Api';
 import SnakeCanvas from '../canvas/canvas';
@@ -24,7 +17,7 @@ let gameDetails = '';
 let position = [{ x: 10, y: 20 }];
 let gameMode = '';
 
-const Game = props => {
+const Game = (props) => {
   const height = 30;
   const width = 30;
 
@@ -48,32 +41,37 @@ const Game = props => {
     console.log(gameDetails);
     socket = socketIOClient(BASESERVERURL);
 
-    // init sockets
-    initSocketEvents();
+      // init sockets
+      initSocketEvents();
 
-    console.log('gameId', 'gameId', gameId, 'gameMode', gameMode);
+      console.log('gameId', 'gameId', gameId, 'gameMode', gameMode);
 
-    if (gameType === 'newGame') {
-      emitEvent('newGameStarted', { gameId, playerId, position, gameDetails });
-    }
+      if (gameType === 'newGame') {
+        emitEvent('newGameStarted', { gameId, playerId, position, gameDetails });
+      }
 
-    if (gameType === 'joinGame') {
-      emitEvent('gameJoined', { gameId, playerId, position, gameDetails });
-    }
+      if (gameType === 'joinGame') {
+        emitEvent('gameJoined', { gameId, playerId, position, gameDetails });
+      }
 
-    // cleanup
-    return () => {
-      // disconnect socket
-      socket.disconnect();
-    };
-  }, [props.location.state.gameId]);
+      // cleanup
+      return () => {
+        // disconnect socket
+        socket.disconnect();
+      };
+    },
+    [props.location.state.gameId]
+  );
 
-  useEffect(() => {
-    window.addEventListener('keydown', ({ key }) => GameInput(key, direction, setDirection));
-    return () => {
-      window.removeEventListener('keydown', GameInput);
-    };
-  }, [direction, setDirection]);
+  useEffect(
+    () => {
+      window.addEventListener('keydown', ({ key }) => GameInput(key, direction, setDirection));
+      return () => {
+        window.removeEventListener('keydown', GameInput);
+      };
+    },
+    [direction, setDirection]
+  );
 
   const moveSnake = () => {
     if (startGame && snake && snake.length) {
@@ -108,7 +106,7 @@ const Game = props => {
             newSnake.push({ x: snake[0].x, y: snake[0].y + 1 });
           }
       }
-      snake.forEach(cell => {
+      snake.forEach((cell) => {
         newSnake.push(cell);
       });
 
@@ -116,7 +114,7 @@ const Game = props => {
 
       if (snake[0].x === food.x && snake[0].y === food.y) {
         // send event when food is consumed by snake to
-        emitEvent('newFood', { gameId, playerId, gameDetails });
+        emitEvent('newFood', { gameId, playerId, gameDetails, updateScore: true });
       } else {
         newSnake.pop();
       }
@@ -130,7 +128,7 @@ const Game = props => {
 
   const detectCollision = ({ snakeHead }) => {
     if (gameMode === 'singleplayer') return;
-    remoteSnake.map(element => {
+    remoteSnake.map((element) => {
       if (snakeHead.x === element.x && snakeHead.y === element.y) {
         console.log('detectCollision');
         setAlive(false);
@@ -161,12 +159,12 @@ const Game = props => {
     });
 
     // when a new snake enter
-    socket.on('newGameStarted', function ({ position }) {
+    socket.on('newGameStarted', function({ position }) {
       console.log('newGameStarted', position);
 
       if (gameMode === 'singleplayer') {
         console.log("gameMode === 'singleplayer'");
-        emitEvent('newFood', { gameId, gameDetails, playerId });
+        emitEvent('newFood', { gameId, gameDetails, playerId, updateScore: false });
         setSnake(position);
         setStartGame(true);
       }
@@ -175,15 +173,10 @@ const Game = props => {
       // position :[{x:0,y:0}] , playerId , gameId
     });
 
-    socket.on('gameJoined', function ({
-      position,
-      playerId: remotePlayerId,
-      gameId,
-      remotePosition
-    }) {
+    socket.on('gameJoined', function({ position, playerId: remotePlayerId, gameId, remotePosition }) {
       // console.table('gameJoined', 'position', position, 'remotePosition', remotePosition, 'gameDetails', gameDetails);
 
-      emitEvent('newFood', { gameId, gameDetails, playerId });
+      emitEvent('newFood', { gameId, gameDetails, playerId, updateScore: false });
       if (remotePlayerId === playerId) {
         setSnake(position);
         setRemoteSnake(remotePosition);
@@ -200,7 +193,7 @@ const Game = props => {
       }
     });
 
-    socket.on('score', function ({ gameDetails: newGameDetails }) {
+    socket.on('score', function({ gameDetails: newGameDetails }) {
       console.log('score', newGameDetails);
       for (const score of newGameDetails) {
         if (score.player_id === playerId) {
@@ -212,7 +205,7 @@ const Game = props => {
 
       gameDetails = newGameDetails;
     });
-    socket.on('newFood', function ({ gameId, playerId, position: newFoodPos }) {
+    socket.on('newFood', function({ gameId, playerId, position: newFoodPos }) {
       setFood(newFoodPos);
     });
   };
