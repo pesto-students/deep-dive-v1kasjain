@@ -230,7 +230,7 @@ const Game = (props) => {
           )}
         </div>
       ) : (
-        <GameStart />
+        <GameStart gameId={gameId}/>
       )}
     </div>
   );
