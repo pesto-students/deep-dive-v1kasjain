@@ -32,15 +32,14 @@ const Game = (props) => {
   const [remoteScore, setRemoteScore] = useState(0);
   const [timestamp, setTimestamp] = useState('no timestamp yet');
 
-  useEffect(
-    () => {
-      gameId = props.location.state.gameId;
-      playerId = props.location.state.playerId;
-      gameType = props.location.state.gameType;
-      gameDetails = props.location.state.gameDetails;
-      gameMode = props.location.state.gameMode;
-      console.log(gameDetails);
-      socket = socketIOClient(BASESERVERURL);
+  useEffect(() => {
+    gameId = props.location.state.gameId;
+    playerId = props.location.state.playerId;
+    gameType = props.location.state.gameType;
+    gameDetails = props.location.state.gameDetails;
+    gameMode = props.location.state.gameMode;
+    console.log(gameDetails);
+    socket = socketIOClient(BASESERVERURL);
 
       // init sockets
       initSocketEvents();
@@ -202,7 +201,7 @@ const Game = (props) => {
     socket.on('score', function({ gameDetails: newGameDetails }) {
       console.log('score', newGameDetails);
       for (const score of newGameDetails) {
-        if (score.playerId === playerId) {
+        if (score.player_id === playerId) {
           setScore(score.score);
         } else {
           setRemoteScore(score.score);
@@ -227,7 +226,11 @@ const Game = (props) => {
       <p>
         Your Score: {score}, Your Opponent Score: {remoteScore}{' '}
       </p>
-      {alive ? <SnakeCanvas snakes={[snake, remoteSnake]} food={food} /> : <GameOver alive={alive} />}
+      {alive ? (
+        <SnakeCanvas snakes={[snake, remoteSnake]} food={food} />
+      ) : (
+        <GameOver alive={alive} />
+      )}
     </div>
   );
 };
